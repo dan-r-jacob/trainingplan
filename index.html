@@ -60,6 +60,7 @@ h1 em{font-family:var(--font-italic);font-style:italic;font-weight:400;letter-sp
 .acct{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
 .acct .status{margin-top:0}
 .acct-panel{padding:18px;margin-top:14px}
+@media (max-width:600px){.acct-panel .addform{grid-template-columns:1fr}}
 .actions label.chip{display:inline-block}
 
 /* Figure tiles */
@@ -244,8 +245,13 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
     <div class="acct-panel tile" id="acctPanel" hidden>
       <p class="eyebrow" style="margin:0 0 10px">Sign in to sync your log across devices</p>
       <div class="addform" style="margin-top:0">
-        <label>Email<input id="acctEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></label>
-        <button class="chip" id="acctSend">Email me a sign-in link</button>
+        <label>Email<input id="acctEmail" type="email" autocomplete="username" inputmode="email" placeholder="you@example.com"></label>
+        <label>Password<input id="acctPass" type="password" autocomplete="current-password" placeholder="8+ characters"></label>
+      </div>
+      <div class="actions" style="margin-top:12px">
+        <button class="chip" id="acctSignIn">Sign in</button>
+        <button class="chip" id="acctSignUp">Create account</button>
+        <button class="linkbtn" id="acctSend" style="align-self:center;margin-left:4px">Email me a sign-in link instead</button>
       </div>
       <div class="addform" id="codeRow" hidden>
         <label>6-digit code<input id="acctCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456"></label>
@@ -532,6 +538,26 @@ acctBtn && acctBtn.addEventListener("click", async ()=>{
   if(session){ await sb.auth.signOut(); return; }
   acctPanel.hidden = !acctPanel.hidden;
   if(!acctPanel.hidden) emailIn.focus();
+});
+const passIn = document.getElementById("acctPass");
+function creds(){
+  const email = emailIn.value.trim(), password = passIn.value;
+  if(!/^\S+@\S+\.\S+$/.test(email)){ acctMsg.textContent = "Enter your email address."; return null; }
+  if(password.length < 8){ acctMsg.textContent = "Enter a password of at least 8 characters."; return null; }
+  return {email, password};
+}
+document.getElementById("acctSignIn").addEventListener("click", async ()=>{
+  const c = creds(); if(!c) return;
+  acctMsg.textContent = "Signing in…";
+  const { error } = await sb.auth.signInWithPassword(c);
+  acctMsg.textContent = error ? (/confirm/i.test(error.message) ? "Confirm your email address first (check your inbox), then sign in." : `Couldn’t sign in: ${error.message}`) : "";
+});
+document.getElementById("acctSignUp").addEventListener("click", async ()=>{
+  const c = creds(); if(!c) return;
+  acctMsg.textContent = "Creating your account…";
+  const { data, error } = await sb.auth.signUp(Object.assign(c, { options:{ emailRedirectTo: location.origin + location.pathname } }));
+  if(error){ acctMsg.textContent = `Couldn’t create the account: ${error.message}`; return; }
+  acctMsg.textContent = data.session ? "" : "Account created. Check your email for a confirmation link, then come back and sign in.";
 });
 document.getElementById("acctSend") && document.getElementById("acctSend").addEventListener("click", async ()=>{
   const email = emailIn.value.trim();

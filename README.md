@@ -20,17 +20,19 @@ This creates a `training_log` table with row-level security switched on, so each
 
 ## 2. Set up sign-in
 
-Sign-in uses a one-time email link or code, so there are no passwords.
+The app signs in with an email address and password. That works on Supabase's built-in email service with no custom SMTP: the only email involved is a one-off confirmation when you create your account, and you can switch even that off.
+
+Supabase's built-in email service only sends to the email addresses of your Supabase organisation's members, and only a couple of emails an hour. So create your app account with the same email address you use for Supabase.
 
 1. Go to **Authentication → URL Configuration**.
-   - Set **Site URL** to your GitHub Pages address, for example `https://yourname.github.io/mcr27/` (you'll get this in step 4; you can come back and fill it in).
+   - Set **Site URL** to your GitHub Pages address, for example `https://yourname.github.io/mcr27/` (you get this in step 4; come back and fill it in).
    - Add the same address under **Redirect URLs**.
-2. Recommended, especially for iPhone: go to **Authentication → Emails → Templates** and add the code to the email, so you can sign in by typing it instead of tapping a link. In both the **Magic link** and **Confirm signup** templates, add a line such as:
-   `Your sign-in code is {{ .Token }}`
-   (Your very first sign-in uses the Confirm signup email; later ones use Magic link.)
-3. Optional: once you've signed in for the first time, turn off new sign-ups under **Authentication → Sign In / Providers** so nobody else can create an account on your project. Your data is protected either way, but this keeps the project to just you.
+2. Go to **Authentication → Sign In / Providers** and open **Email**. Check that the email provider is enabled.
+3. Choose one:
+   - **Simplest:** turn off **Confirm email** and save. No emails are sent at all; you just create an account and you're signed in.
+   - **Or** leave it on. When you create your account you'll get one confirmation email; tap its link, then sign in.
 
-Supabase's built-in email service only sends a few emails an hour. That's plenty here, because you stay signed in for months on each device.
+The "Email me a sign-in link instead" option in the app also works, but it uses up the hourly email allowance and, on iPhone, the link opens in Safari rather than the home-screen app. Password sign-in avoids both.
 
 ## 3. Add your project details to `config.js`
 
@@ -62,8 +64,12 @@ Any parkruns or races you added by hand aren't in that CSV, so add those again u
 
 ## 6. Install it on your phone
 
-- **iPhone:** open the address in Safari, tap **Share → Add to Home Screen**. Open the app from the new icon, tap **Sign in to sync**, and use the **6-digit code** from the email (links open in Safari, which has separate storage from the installed app).
-- **Android:** open the address in Chrome, then use the menu's **Install app** or **Add to Home screen**. Either the link or the code works.
+- **iPhone:** open the address in Safari, tap **Share → Add to Home Screen**. Open the app from the new icon, tap **Sign in to sync** and sign in with your email and password.
+- **Android:** open the address in Chrome, then use the menu's **Install app** or **Add to Home screen**, open it and sign in.
+
+## 7. Lock it down (recommended)
+
+Once your account exists, go to **Authentication → Sign In / Providers** and turn off **Allow new users to sign up**. Your log is private either way, but this stops anyone else creating an account on your project, which matters most if you turned off email confirmation.
 
 ## Updating later
 
