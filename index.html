@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="./config.js"></script>
-<title>Manchester Marathon 2027 – Sub-4 Plan</title>
+<title>Training plan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,400&display=swap" rel="stylesheet">
@@ -60,6 +60,14 @@ h1 em{font-family:var(--font-italic);font-style:italic;font-weight:400;letter-sp
 .acct{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
 .acct .status{margin-top:0}
 .acct-panel{padding:18px;margin-top:14px}
+.planbar{display:flex;align-items:center;gap:10px;margin:0 0 22px}
+.planbar select{font:inherit;font-size:15px;color:var(--white);background:var(--deep);border:1px solid rgba(255,255,255,.45);border-radius:0;padding:8px 10px;min-height:42px;max-width:100%}
+.plans li{flex-direction:column;gap:10px;padding:14px 0}
+.plans li.active::before{display:none}
+.plans .pname{font-family:var(--font-display);font-size:18px;font-weight:500;letter-spacing:-.3px;color:var(--white)}
+.plan-acts{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:flex-start;align-items:center;flex:none !important}
+.prompt{white-space:pre-wrap;word-break:break-word;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--w72);background:var(--cobalt);border:1px solid rgba(255,255,255,.3);padding:14px;max-height:320px;overflow:auto;margin:10px 0 0}
+.axis.dense span{font-size:9px}
 @media (max-width:600px){.acct-panel .addform{grid-template-columns:1fr}}
 .actions label.chip{display:inline-block}
 
@@ -232,12 +240,13 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
 <body>
 <div class="wrap">
   <div class="statusbar">
-    <div class="left"><span class="brand">MCR/27</span><span class="eyebrow">Sub-4 training plan</span></div>
+    <div class="left"><span class="brand" data-brand>MCR/27</span><span class="eyebrow" id="planTitle">Training plan</span></div>
     <span class="eyebrow" id="issue">Week no. 01</span>
   </div>
   <header class="hero">
-    <h1>Twenty weeks to <em>Manchester</em></h1>
-    <p class="sub">Marathon on Sunday 18 April 2027. Wednesday sessions and Sunday runs are timed so they work on a treadmill; Saturday long runs are in kilometres.</p>
+    <div class="planbar" id="planbar" hidden><label class="eyebrow" for="planSel">Plan</label><select id="planSel"></select></div>
+    <h1 id="headline">Training plan</h1>
+    <p class="sub" id="sub"></p>
     <div class="acct">
       <div class="status" id="status" role="status">Loading your log…</div>
       <button class="chip" id="acctBtn" hidden>Sign in to sync</button>
@@ -266,7 +275,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
     <p class="cap topr">Tap a node to open the week</p>
     <div class="graph" id="graph"></div>
     <div class="axis" id="wknums"></div>
-    <div class="phases" aria-hidden="true"><span>Base</span><span>Build</span><span>Marathon build</span><span>Peak</span><span>Taper</span></div>
+    <div class="phases" id="phases" aria-hidden="true"></div>
     <p class="figcap"><span class="idx">01</span>Long-run progression, km. Filled nodes are logged.</p>
   </section>
   <div class="totals" id="totals"></div>
@@ -282,7 +291,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
         <thead><tr><th>Effort</th><th>Pace per km</th><th>Treadmill</th><th>How it should feel</th></tr></thead>
         <tbody id="paceBody"></tbody>
       </table></div>
-      <p>On a treadmill, set a 1% incline to match outdoor effort. Marathon pace stays at your sub-4 goal pace throughout; the other paces follow your latest result.</p>
+      <p>On a treadmill, set a 1% incline to match outdoor effort. Goal marathon pace stays fixed at sub-4. Current-fitness marathon pace and the other paces follow your latest result.</p>
       <p class="eyebrow" style="margin:28px 0 0">Results used for your paces</p>
       <ul class="results" id="results"></ul>
       <p style="margin:12px 0 0">Ran a parkrun or a race? Add it here and paces from that week onwards will update.</p>
@@ -296,32 +305,9 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
       <p class="err" id="addErr" role="alert"></p>
     </details>
 
-    <details>
+    <details id="notesWrap">
       <summary><span class="idx">03</span>Coach’s notes</summary>
-      <div class="notes">
-        <h3>Easy really means easy</h3>
-        <p>Your current easy pace of 6:00–6:30 is on the quick side for your fitness. Keeping easy and long runs in the ranges shown above is what lets you absorb the hard Wednesday sessions and protects your calves and shins.</p>
-        <h3>Calves and shins</h3>
-        <ul>
-          <li>The plan builds gradually, with a lighter week every few weeks. Don’t add extra distance on top.</li>
-          <li>Prioritise calf raises (straight and bent knee) and tibialis raises in your strength work, and keep heavy leg sessions away from the day before Wednesday’s session or the long run.</li>
-          <li>If your calves or shins feel tight after a long run, swap Sunday for 30–40 minutes on a bike or cross-trainer.</li>
-          <li>Pain on a specific spot of the shin bone, or pain that gets worse as you run, is a stop signal. Take 2–3 days off, and see a physio if it lasts more than a week.</li>
-          <li>Keep an eye on shoe mileage; most trainers need replacing somewhere around 600–800 km.</li>
-        </ul>
-        <h3>When life gets in the way</h3>
-        <ul>
-          <li>Missed a Wednesday? Let it go. Don’t squeeze it into another day.</li>
-          <li>Missed a Saturday long run? Do it on Sunday instead of the easy run, never both.</li>
-          <li>Ill or injured for more than a week? Repeat the previous week before moving on.</li>
-        </ul>
-        <h3>Fuelling practice</h3>
-        <p>From Week 7, take a gel or similar every 30–40 minutes on any run over 90 minutes. Use the long runs to rehearse your race-morning breakfast and kit too. Check which gels the event offers on course and practise with those, or plan to carry your own.</p>
-        <h3>The optional fourth run</h3>
-        <p>From Week 11 there’s an optional easy run. Any day works, ideally Monday or Tuesday. Avoid Friday, the day before the long run. Skipping it is fine; it’s a bonus, not a requirement.</p>
-        <h3>Race day</h3>
-        <p>Sub-4 is 5:41 per km, but GPS usually measures a little long and you won’t run perfect lines, so aim for 5:35–5:38 on your watch. Go out at the slow end for the first 5 km. If you feel good at 32 km, that’s when you can push.</p>
-      </div>
+      <div class="notes" id="notes"></div>
     </details>
 
     <details>
@@ -335,16 +321,35 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
       </div>
       <p class="err" id="importMsg" role="status"></p>
     </details>
+    <details id="plansWrap">
+      <summary><span class="idx">05</span>Your plans</summary>
+      <p>Switch between plans, or add a new one for your next race. Each plan keeps its own log and results.</p>
+      <ul class="results plans" id="planList"></ul>
+      <p class="eyebrow" style="margin:26px 0 6px">Add a plan</p>
+      <p>Upload a plan file, or paste a plan an AI tool gave you. If you’re adding a newer version of a plan you already have, your log for it is kept.</p>
+      <div class="actions" style="margin-top:10px">
+        <label class="chip" for="planFile" style="cursor:pointer">Upload plan file</label>
+        <input type="file" id="planFile" accept=".json,application/json,text/plain" hidden>
+      </div>
+      <div class="log" style="border-top:none;padding-top:0">
+        <label class="wide">Or paste the plan here<textarea id="planPaste" rows="4" placeholder="Paste the JSON code block from Claude, ChatGPT or similar"></textarea></label>
+      </div>
+      <div class="actions" style="margin-top:10px"><button class="chip" id="planPasteBtn">Add pasted plan</button></div>
+      <p class="err" id="planMsg" role="status"></p>
+      <p class="eyebrow" style="margin:26px 0 6px">Create a plan with an AI tool</p>
+      <p>Copy this prompt into Claude, ChatGPT or another AI tool. Fill in the details about you, answer its questions, and it will give you a plan in the right format to paste above.</p>
+      <div class="actions" style="margin-top:10px"><button class="chip" id="copyPrompt">Copy prompt</button></div>
+      <p class="err" id="copyMsg" role="status"></p>
+      <pre class="prompt" id="aiPrompt"></pre>
+    </details>
   </section>
-  <footer><span class="brand" style="font-size:14px">MCR/27</span><span class="eyebrow">Manchester Marathon, 18.04.2027</span></footer>
+  <footer><span class="brand" style="font-size:14px" data-brand>MCR/27</span><span class="eyebrow" id="footMeta"></span></footer>
 </div>
 
 <script>
 (function(){
 "use strict";
-const START = Date.UTC(2026,10,30); // Mon 30 Nov 2026
 const DAY = 864e5;
-const RACE = Date.UTC(2027,3,18);
 const HALF = 21097.5;
 
 // ---------- Fitness model (Daniels-style running formula) ----------
@@ -355,128 +360,153 @@ function predict(vdot, dm){ let lo=dm/500, hi=dm/40; for(let i=0;i<60;i++){ cons
 const spk = v => 60000/v;
 const r5 = s => Math.round(s/5)*5;
 const mmss = s => { s=Math.round(s); const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return h?`${h}:${String(m).padStart(2,"0")}:${String(x).padStart(2,"0")}`:`${m}:${String(x).padStart(2,"0")}`; };
+const hmm = s => { const m=Math.round(s/60); return `${Math.floor(m/60)}:${String(m%60).padStart(2,"0")}`; };
 const kmh = s => (3600/s).toFixed(1);
-function zones(vd){
-  const rng=(a,b)=>[r5(spk(vFromVO2(b*vd))), r5(spk(vFromVO2(a*vd)))];
-  return { easy:rng(0.66,0.74), long:rng(0.64,0.71), tempo:rng(0.86,0.875), thr:rng(0.875,0.90), int:rng(0.955,1.0), mp:[335,340] };
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function parseTime(t){
+  if(t==null||t==="") return null; const p = String(t).trim().split(":").map(x=>parseFloat(x));
+  if(!p.length || p.some(isNaN)) return null;
+  if(p.length===1) return p[0]*60; if(p.length===2) return p[0]*60+p[1]; if(p.length===3) return p[0]*3600+p[1]*60+p[2]; return null;
 }
-function zoneText(z, vd){
-  if(z==="tt5"){ const t=predict(vd,5000); return `About ${mmss(r5(t/5))}/km (${kmh(t/5)} km/h), around ${mmss(t)} at current fitness`; }
-  if(z==="tthm"){ const t=predict(vd,HALF); return `About ${mmss(r5(t/21.0975))}/km, around ${mmss(t)} at current fitness`; }
-  const r=zones(vd)[z]; return `${mmss(r[0])}–${mmss(r[1])}/km (${kmh(r[1])}–${kmh(r[0])} km/h)`;
-}
-
-// ---------- Plan data ----------
-const S = (amt, txt, z) => [amt, txt, z];
-const TT = {k:"test",m:50,title:"5 km time trial",steps:[S("15 min","Easy warm-up with 3 × 20 s strides","easy"),S("5 km","Time trial: even, hard effort, strongest in the last kilometre","tt5"),S("10 min","Easy cool-down","easy")],
-  note:"Checkpoint. Log your 5 km time and your paces update from this week on. A flat route or a treadmill at 1% is ideal; a parkrun on Saturday morning doesn’t replace this, as you’ll need your legs for the long run."};
-const WED = {
- 1:{k:"easy",m:40,steps:[S("28 min","Easy","easy"),S("6 × 20 s","Strides, 60 s easy jog between"),S("4 min","Easy")]},
- 2:{k:"tempo",m:45,steps:[S("15 min","Easy warm-up"),S("3 × 5 min","Threshold, 2 min easy jog between","thr"),S("11 min","Easy cool-down")]},
- 3:{k:"tempo",m:50,steps:[S("15 min","Easy warm-up"),S("4 × 5 min","Threshold, 2 min easy jog between","thr"),S("9 min","Easy cool-down")]},
- 4:{k:"easy",m:40,steps:[S("28 min","Easy","easy"),S("6 × 20 s","Strides, 60 s easy jog between"),S("4 min","Easy")]},
- 5:{k:"tempo",m:50,steps:[S("15 min","Easy warm-up"),S("2 × 10 min","Threshold, 3 min easy jog between","thr"),S("12 min","Easy cool-down")]},
- 6:TT,
- 7:{k:"tempo",m:55,steps:[S("15 min","Easy warm-up"),S("25 min","Continuous tempo, a touch easier than threshold","tempo"),S("15 min","Easy cool-down")]},
- 8:{k:"mp",m:45,steps:[S("10 min","Easy warm-up"),S("20 min","Marathon pace","mp"),S("15 min","Easy cool-down")]},
- 9:{k:"intervals",m:55,steps:[S("15 min","Easy warm-up"),S("5 × 4 min","Interval pace, 2 min easy jog between","int"),S("12 min","Easy cool-down")]},
- 10:{k:"tempo",m:60,steps:[S("15 min","Easy warm-up"),S("3 × 10 min","Threshold, 2 min easy jog between","thr"),S("11 min","Easy cool-down")]},
- 11:{k:"mp",m:60,steps:[S("10 min","Easy warm-up"),S("40 min","Marathon pace","mp"),S("10 min","Easy cool-down")]},
- 12:TT,
- 13:{k:"tempo",m:60,steps:[S("15 min","Easy warm-up"),S("2 × 15 min","Threshold, 3 min easy jog between","thr"),S("12 min","Easy cool-down")]},
- 14:{k:"mp",m:60,steps:[S("10 min","Easy warm-up"),S("45 min","Marathon pace","mp"),S("5 min","Easy cool-down")]},
- 15:{k:"easy",m:40,steps:[S("28 min","Easy","easy"),S("6 × 20 s","Strides, 60 s easy jog between"),S("4 min","Easy")]},
- 16:{k:"intervals",m:60,steps:[S("15 min","Easy warm-up"),S("6 × 4 min","Interval pace, 2 min easy jog between","int"),S("11 min","Easy cool-down")]},
- 17:{k:"tempo",m:60,steps:[S("15 min","Easy warm-up"),S("3 × 10 min","Threshold, 2 min easy jog between","thr"),S("11 min","Easy cool-down")]},
- 18:{k:"tempo",m:50,steps:[S("15 min","Easy warm-up"),S("4 × 5 min","Threshold, 2 min easy jog between","thr"),S("9 min","Easy cool-down")]},
- 19:{k:"mp",m:45,steps:[S("10 min","Easy warm-up"),S("25 min","Marathon pace","mp"),S("10 min","Easy cool-down")]},
- 20:{k:"mp",m:30,steps:[S("10 min","Easy"),S("3 × 3 min","Marathon pace, 2 min easy jog between","mp"),S("7 min","Easy")]}
-};
-const SAT = {
- 1:{km:15},2:{km:16},3:{km:18},4:{km:14},5:{km:19},
- 6:{km:20,steps:[S("18 km","Easy long-run pace","long"),S("2 km","Steady, a little quicker")]},
- 7:{km:22,note:"Start practising fuelling: something every 30–40 minutes."},
- 8:{km:16},9:{km:24},
- 10:{km:26,k:"mp",steps:[S("21 km","Easy long-run pace","long"),S("5 km","Marathon pace","mp")]},
- 11:{km:27},12:{km:18},
- 13:{km:28,k:"mp",steps:[S("22 km","Easy long-run pace","long"),S("6 km","Marathon pace","mp")]},
- 14:{km:30},
- 15:{km:21.1,k:"test",title:"Half-marathon time trial",steps:[S("+ 2 km","Easy warm-up before you start","easy"),S("21.1 km","Time trial: even, hard effort","tthm")],note:"Your big checkpoint. Log your time and paces update for the final weeks. Around 1:55 or quicker means sub-4 is realistic. Enter a local half this weekend if you can find one."},
- 16:{km:30,k:"mp",steps:[S("12 km","Easy long-run pace","long"),S("10 km","Marathon pace","mp"),S("8 km","Easy long-run pace","long")]},
- 17:{km:32,note:"Your longest run. Full race rehearsal: breakfast, kit, gels."},
- 18:{km:26,k:"mp",steps:[S("6 km","Easy long-run pace","long"),S("14 km","Marathon pace","mp"),S("6 km","Easy long-run pace","long")]},
- 19:{km:18},
- 20:{km:0,k:"easy",title:"Rest or 15–20 min shakeout",steps:[S("15–20 min","Very easy jog with 3 × 20 s strides, or rest completely")],note:"Lay out your kit, pin your number, eat a familiar carb-heavy dinner."}
-};
-const SUN = [30,35,35,30,40,40,45,30,45,45,50,35,50,50,30,50,45,40,30,0];
-const OPT = {11:35,12:30,13:40,14:40,15:30,16:45,17:45,18:40,19:30,20:20};
-const PHASE = w => w<=4?"Base":w<=8?"Build":w<=14?"Marathon build":w<=17?"Peak":"Taper";
-const CUTBACK = {4:"Christmas week, lighter",6:"Checkpoint",8:"Lighter week",12:"Lighter week, checkpoint",15:"Checkpoint week",19:"Taper",20:"Race week"};
-const FOCUS = {
- 1:"Settle into the routine. Every run easy apart from a few relaxed strides.",
- 2:"First threshold session. Keep the reps controlled; finish feeling you had more.",
- 3:"First long run beyond 16 km. Keep it relaxed.",
- 4:"Christmas week. Lighter on purpose, so enjoy it and don’t make up miles.",
- 5:"Back to it. Longer threshold reps start building your sub-4 engine.",
- 6:"First checkpoint: a 5 km time trial on Wednesday, then 20 km on Saturday.",
- 7:"22 km long run. Start practising fuelling.",
- 8:"Lighter week. First taste of marathon pace on Wednesday.",
- 9:"Into marathon-specific training. 24 km on Saturday.",
- 10:"First marathon-pace finish to a long run. Stay patient early.",
- 11:"40 minutes at marathon pace. The optional fourth run starts this week.",
- 12:"Lighter week with your second 5 km checkpoint.",
- 13:"Long run with 6 km at goal pace on tired legs.",
- 14:"Your biggest Wednesday at marathon pace, and 30 km on Saturday.",
- 15:"Checkpoint. Easy midweek, then a half-marathon time trial.",
- 16:"10 km at marathon pace in the middle of a 30 km run.",
- 17:"Peak week: 32 km. Treat it as a dress rehearsal.",
- 18:"Taper begins, but there’s one last 14 km at goal pace.",
- 19:"Volume drops. Keep a little pace in the legs and sleep well.",
- 20:"Race week. Short and sharp, then rest. The hard work is done."
-};
-const CHECKPOINTS = [["w6-wed",5000,6,"5 km time trial, Week 6"],["w12-wed",5000,12,"5 km time trial, Week 12"],["w15-sat",HALF,15,"Half-marathon time trial, Week 15"]];
-const BASELINE = {id:"base",label:"Half marathon, autumn 2026 (starting point)",dm:HALF,sec:7200,week:0};
-
-function at(week, off){return new Date(START + ((week-1)*7+off)*DAY);}
+const plausible = (dm,sec) => { const p=sec/(dm/1000); return p>=150 && p<=720; };
+const todayUTC = () => { const n=new Date(); return Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()); };
 function fmtDate(d,o){return d.toLocaleDateString("en-GB",Object.assign({timeZone:"UTC"},o||{weekday:"short",day:"numeric",month:"short"}));}
-const KIND = {easy:"Easy",tempo:"Threshold",intervals:"Intervals",mp:"Marathon pace",long:"Long run",race:"Race day",test:"Time trial"};
+const parseISO = s => /^\d{4}-\d{2}-\d{2}$/.test(s||"") ? Date.parse(s+"T00:00:00Z") : NaN;
 
-function sessionsFor(w){
-  const out=[];
-  const wd=WED[w];
-  out.push({id:`w${w}-wed`,day:at(w,2),k:wd.k,title:wd.title||`${wd.m} min`,steps:wd.steps,note:wd.note,planMin:wd.m,checkpoint:wd.k==="test"});
-  const st=SAT[w];
-  out.push({id:`w${w}-sat`,day:at(w,5),k:st.k||"long",kindLabel:st.k==="test"?"Time trial":(w===20?"Pre-race":"Long run"),
-    title:st.title||`${st.km} km`,steps:st.steps||[S(`${st.km} km`,"Easy long-run pace","long")],note:st.note,planKm:st.km||null,checkpoint:st.k==="test"});
-  if(w===20){
-    out.push({id:`w20-sun`,day:at(20,6),k:"race",kindLabel:"Race day",title:"Manchester Marathon",
-      steps:[S("0–5 km","Settle in at 5:40/km or a touch slower"),S("5–32 km","Lock in at 5:35–5:38/km by your watch"),S("32–42.2 km","Hold form; push if you have it")],
-      note:"Fuel every 30–40 minutes from the start. Enjoy it, you’ve earned it.",planKm:42.2});
-  } else {
-    out.push({id:`w${w}-sun`,day:at(w,6),k:"easy",kindLabel:"Recovery",title:`${SUN[w-1]} min`,
-      steps:[S(`${SUN[w-1]} min`,"Easy","easy")],note:w===15?"Very easy after yesterday’s time trial; walk breaks are fine.":"Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight.",planMin:SUN[w-1]});
-  }
-  if(OPT[w]){
-    out.push({id:`w${w}-opt`,day:null,k:"easy",kindLabel:"Easy",optional:true,title:`${OPT[w]} min`,
-      steps:[S(`${OPT[w]} min`,w===20?"Very easy, Monday or Tuesday only":"Easy","easy")],note:w===20?null:"Any day except Friday. Monday or Tuesday is ideal.",planMin:OPT[w]});
-  }
-  return out;
+// ---------- Plans ----------
+const RAW_BUILTIN = {"format": "run-plan/1", "id": "manchester-2027", "title": "Sub-4 training plan", "brand": "MCR/27", "race": {"name": "Manchester Marathon", "location": "Manchester", "date": "2027-04-18", "distanceKm": 42.195, "targetTime": "3:59:00", "goalPace": ["5:35", "5:40"], "targetLabel": "sub-4"}, "startDate": "2026-11-30", "baseline": {"label": "Half marathon, autumn 2026 (starting point)", "distanceKm": 21.0975, "time": "2:00:00"}, "intro": "Wednesday sessions and Sunday runs are timed so they work on a treadmill; Saturday long runs are in kilometres.", "phases": [{"name": "Base", "fromWeek": 1, "toWeek": 4}, {"name": "Build", "fromWeek": 5, "toWeek": 8}, {"name": "Marathon build", "fromWeek": 9, "toWeek": 14}, {"name": "Peak", "fromWeek": 15, "toWeek": 17}, {"name": "Taper", "fromWeek": 18, "toWeek": 20}], "notes": [{"title": "Easy really means easy", "text": ["Your current easy pace of 6:00–6:30 is on the quick side for your fitness. Keeping easy and long runs in the ranges shown in the pace table is what lets you absorb the hard Wednesday sessions and protects your calves and shins."]}, {"title": "Calves and shins", "bullets": ["The plan builds gradually, with a lighter week every few weeks. Don’t add extra distance on top.", "Prioritise calf raises (straight and bent knee) and tibialis raises in your strength work, and keep heavy leg sessions away from the day before Wednesday’s session or the long run.", "If your calves or shins feel tight after a long run, swap Sunday for 30–40 minutes on a bike or cross-trainer.", "Pain on a specific spot of the shin bone, or pain that gets worse as you run, is a stop signal. Take 2–3 days off, and see a physio if it lasts more than a week.", "Keep an eye on shoe mileage; most trainers need replacing somewhere around 600–800 km."]}, {"title": "When life gets in the way", "bullets": ["Missed a Wednesday? Let it go. Don’t squeeze it into another day.", "Missed a Saturday long run? Do it on Sunday instead of the easy run, never both.", "Ill or injured for more than a week? Repeat the previous week before moving on."]}, {"title": "Fuelling practice", "text": ["From Week 7, take a gel or similar every 30–40 minutes on any run over 90 minutes. Use the long runs to rehearse your race-morning breakfast and kit too. Check which gels the event offers on course and practise with those, or plan to carry your own."]}, {"title": "The optional fourth run", "text": ["From Week 11 there’s an optional easy run. Any day works, ideally Monday or Tuesday. Avoid Friday, the day before the long run. Skipping it is fine; it’s a bonus, not a requirement."]}, {"title": "Race day", "text": ["Sub-4 is 5:41 per km, but GPS usually measures a little long and you won’t run perfect lines, so aim for 5:35–5:38 on your watch. Go out at the slow end for the first 5 km. If you feel good at 32 km, that’s when you can push."]}], "weeks": [{"week": 1, "focus": "Settle into the routine. Every run easy apart from a few relaxed strides.", "sessions": [{"day": "Wed", "type": "easy", "title": "40 min", "durationMin": 40, "steps": [{"amount": "28 min", "text": "Easy", "zone": "easy"}, {"amount": "6 × 20 s", "text": "Strides, 60 s easy jog between"}, {"amount": "4 min", "text": "Easy"}]}, {"day": "Sat", "type": "long", "title": "15 km", "distanceKm": 15, "steps": [{"amount": "15 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 2, "focus": "First threshold session. Keep the reps controlled; finish feeling you had more.", "sessions": [{"day": "Wed", "type": "threshold", "title": "45 min", "durationMin": 45, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "3 × 5 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "11 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "16 km", "distanceKm": 16, "steps": [{"amount": "16 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "35 min", "label": "Recovery", "durationMin": 35, "steps": [{"amount": "35 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 3, "focus": "First long run beyond 16 km. Keep it relaxed.", "sessions": [{"day": "Wed", "type": "threshold", "title": "50 min", "durationMin": 50, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "4 × 5 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "9 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "18 km", "distanceKm": 18, "steps": [{"amount": "18 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "35 min", "label": "Recovery", "durationMin": 35, "steps": [{"amount": "35 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 4, "focus": "Christmas week. Lighter on purpose, so enjoy it and don’t make up miles.", "tag": "Christmas week, lighter", "sessions": [{"day": "Wed", "type": "easy", "title": "40 min", "durationMin": 40, "steps": [{"amount": "28 min", "text": "Easy", "zone": "easy"}, {"amount": "6 × 20 s", "text": "Strides, 60 s easy jog between"}, {"amount": "4 min", "text": "Easy"}]}, {"day": "Sat", "type": "long", "title": "14 km", "distanceKm": 14, "steps": [{"amount": "14 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 5, "focus": "Back to it. Longer threshold reps start building your sub-4 engine.", "sessions": [{"day": "Wed", "type": "threshold", "title": "50 min", "durationMin": 50, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "2 × 10 min", "text": "Threshold, 3 min easy jog between", "zone": "threshold"}, {"amount": "12 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "19 km", "distanceKm": 19, "steps": [{"amount": "19 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "40 min", "label": "Recovery", "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 6, "focus": "First checkpoint: a 5 km time trial on Wednesday, then 20 km on Saturday.", "tag": "Checkpoint", "sessions": [{"day": "Wed", "type": "test", "title": "5 km time trial", "durationMin": 50, "checkpoint": {"distanceKm": 5}, "steps": [{"amount": "15 min", "text": "Easy warm-up with 3 × 20 s strides", "zone": "easy"}, {"amount": "5 km", "text": "Time trial: even, hard effort, strongest in the last kilometre", "zone": "tt"}, {"amount": "10 min", "text": "Easy cool-down", "zone": "easy"}], "note": "Checkpoint. Log your 5 km time and your paces update from this week on. A flat route or a treadmill at 1% is ideal; a parkrun on Saturday morning doesn’t replace this, as you’ll need your legs for the long run."}, {"day": "Sat", "type": "long", "title": "20 km", "distanceKm": 20, "steps": [{"amount": "18 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "2 km", "text": "Steady, a little quicker"}]}, {"day": "Sun", "type": "recovery", "title": "40 min", "label": "Recovery", "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 7, "focus": "22 km long run. Start practising fuelling.", "sessions": [{"day": "Wed", "type": "tempo", "title": "55 min", "durationMin": 55, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "25 min", "text": "Continuous tempo, a touch easier than threshold", "zone": "tempo"}, {"amount": "15 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "22 km", "distanceKm": 22, "steps": [{"amount": "22 km", "text": "Easy long-run pace", "zone": "long"}], "note": "Start practising fuelling: something every 30–40 minutes."}, {"day": "Sun", "type": "recovery", "title": "45 min", "label": "Recovery", "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 8, "focus": "Lighter week. First taste of marathon pace on Wednesday.", "tag": "Lighter week", "sessions": [{"day": "Wed", "type": "mp", "title": "45 min", "durationMin": 45, "steps": [{"amount": "10 min", "text": "Easy warm-up"}, {"amount": "20 min", "text": "Marathon pace", "zone": "mp"}, {"amount": "15 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "16 km", "distanceKm": 16, "steps": [{"amount": "16 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 9, "focus": "Into marathon-specific training. 24 km on Saturday.", "sessions": [{"day": "Wed", "type": "intervals", "title": "55 min", "durationMin": 55, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "5 × 4 min", "text": "Interval pace, 2 min easy jog between", "zone": "intervals"}, {"amount": "12 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "24 km", "distanceKm": 24, "steps": [{"amount": "24 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "45 min", "label": "Recovery", "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 10, "focus": "First marathon-pace finish to a long run. Stay patient early.", "sessions": [{"day": "Wed", "type": "threshold", "title": "60 min", "durationMin": 60, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "3 × 10 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "11 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "26 km", "distanceKm": 26, "steps": [{"amount": "21 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "5 km", "text": "Marathon pace", "zone": "mp"}]}, {"day": "Sun", "type": "recovery", "title": "45 min", "label": "Recovery", "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 11, "focus": "40 minutes at marathon pace. The optional fourth run starts this week.", "sessions": [{"day": "Wed", "type": "mp", "title": "60 min", "durationMin": 60, "steps": [{"amount": "10 min", "text": "Easy warm-up"}, {"amount": "40 min", "text": "Marathon pace", "zone": "mp"}, {"amount": "10 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "27 km", "distanceKm": 27, "steps": [{"amount": "27 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "50 min", "label": "Recovery", "durationMin": 50, "steps": [{"amount": "50 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "35 min", "label": "Easy", "optional": true, "durationMin": 35, "steps": [{"amount": "35 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 12, "focus": "Lighter week with your second 5 km checkpoint.", "tag": "Lighter week, checkpoint", "sessions": [{"day": "Wed", "type": "test", "title": "5 km time trial", "durationMin": 50, "checkpoint": {"distanceKm": 5}, "steps": [{"amount": "15 min", "text": "Easy warm-up with 3 × 20 s strides", "zone": "easy"}, {"amount": "5 km", "text": "Time trial: even, hard effort, strongest in the last kilometre", "zone": "tt"}, {"amount": "10 min", "text": "Easy cool-down", "zone": "easy"}], "note": "Checkpoint. Log your 5 km time and your paces update from this week on. A flat route or a treadmill at 1% is ideal; a parkrun on Saturday morning doesn’t replace this, as you’ll need your legs for the long run."}, {"day": "Sat", "type": "long", "title": "18 km", "distanceKm": 18, "steps": [{"amount": "18 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "35 min", "label": "Recovery", "durationMin": 35, "steps": [{"amount": "35 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "30 min", "label": "Easy", "optional": true, "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 13, "focus": "Long run with 6 km at goal pace on tired legs.", "sessions": [{"day": "Wed", "type": "threshold", "title": "60 min", "durationMin": 60, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "2 × 15 min", "text": "Threshold, 3 min easy jog between", "zone": "threshold"}, {"amount": "12 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "28 km", "distanceKm": 28, "steps": [{"amount": "22 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "6 km", "text": "Marathon pace", "zone": "mp"}]}, {"day": "Sun", "type": "recovery", "title": "50 min", "label": "Recovery", "durationMin": 50, "steps": [{"amount": "50 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "40 min", "label": "Easy", "optional": true, "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 14, "focus": "Your biggest Wednesday at marathon pace, and 30 km on Saturday.", "sessions": [{"day": "Wed", "type": "mp", "title": "60 min", "durationMin": 60, "steps": [{"amount": "10 min", "text": "Easy warm-up"}, {"amount": "45 min", "text": "Marathon pace", "zone": "mp"}, {"amount": "5 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "30 km", "distanceKm": 30, "steps": [{"amount": "30 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "50 min", "label": "Recovery", "durationMin": 50, "steps": [{"amount": "50 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "40 min", "label": "Easy", "optional": true, "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 15, "focus": "Checkpoint. Easy midweek, then a half-marathon time trial.", "tag": "Checkpoint week", "sessions": [{"day": "Wed", "type": "easy", "title": "40 min", "durationMin": 40, "steps": [{"amount": "28 min", "text": "Easy", "zone": "easy"}, {"amount": "6 × 20 s", "text": "Strides, 60 s easy jog between"}, {"amount": "4 min", "text": "Easy"}]}, {"day": "Sat", "type": "test", "title": "Half-marathon time trial", "distanceKm": 21.1, "checkpoint": {"distanceKm": 21.0975}, "steps": [{"amount": "+ 2 km", "text": "Easy warm-up before you start", "zone": "easy"}, {"amount": "21.1 km", "text": "Time trial: even, hard effort", "zone": "tt"}], "note": "Your big checkpoint. Log your time and paces update for the final weeks. Around 1:55 or quicker means sub-4 is realistic. Enter a local half this weekend if you can find one."}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Very easy after yesterday’s time trial; walk breaks are fine."}, {"day": "Any", "type": "easy", "title": "30 min", "label": "Easy", "optional": true, "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 16, "focus": "10 km at marathon pace in the middle of a 30 km run.", "sessions": [{"day": "Wed", "type": "intervals", "title": "60 min", "durationMin": 60, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "6 × 4 min", "text": "Interval pace, 2 min easy jog between", "zone": "intervals"}, {"amount": "11 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "30 km", "distanceKm": 30, "steps": [{"amount": "12 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "10 km", "text": "Marathon pace", "zone": "mp"}, {"amount": "8 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "50 min", "label": "Recovery", "durationMin": 50, "steps": [{"amount": "50 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "45 min", "label": "Easy", "optional": true, "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 17, "focus": "Peak week: 32 km. Treat it as a dress rehearsal.", "sessions": [{"day": "Wed", "type": "threshold", "title": "60 min", "durationMin": 60, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "3 × 10 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "11 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "32 km", "distanceKm": 32, "steps": [{"amount": "32 km", "text": "Easy long-run pace", "zone": "long"}], "note": "Your longest run. Full race rehearsal: breakfast, kit, gels."}, {"day": "Sun", "type": "recovery", "title": "45 min", "label": "Recovery", "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "45 min", "label": "Easy", "optional": true, "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 18, "focus": "Taper begins, but there’s one last 14 km at goal pace.", "sessions": [{"day": "Wed", "type": "threshold", "title": "50 min", "durationMin": 50, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "4 × 5 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "9 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "26 km", "distanceKm": 26, "steps": [{"amount": "6 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "14 km", "text": "Marathon pace", "zone": "mp"}, {"amount": "6 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "40 min", "label": "Recovery", "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "40 min", "label": "Easy", "optional": true, "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 19, "focus": "Volume drops. Keep a little pace in the legs and sleep well.", "tag": "Taper", "sessions": [{"day": "Wed", "type": "mp", "title": "45 min", "durationMin": 45, "steps": [{"amount": "10 min", "text": "Easy warm-up"}, {"amount": "25 min", "text": "Marathon pace", "zone": "mp"}, {"amount": "10 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "18 km", "distanceKm": 18, "steps": [{"amount": "18 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "30 min", "label": "Easy", "optional": true, "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 20, "focus": "Race week. Short and sharp, then rest. The hard work is done.", "tag": "Race week", "sessions": [{"day": "Wed", "type": "mp", "title": "30 min", "durationMin": 30, "steps": [{"amount": "10 min", "text": "Easy"}, {"amount": "3 × 3 min", "text": "Marathon pace, 2 min easy jog between", "zone": "mp"}, {"amount": "7 min", "text": "Easy"}]}, {"day": "Sat", "type": "rest", "title": "Rest or 15–20 min shakeout", "label": "Pre-race", "steps": [{"amount": "15–20 min", "text": "Very easy jog with 3 × 20 s strides, or rest completely"}], "note": "Lay out your kit, pin your number, eat a familiar carb-heavy dinner."}, {"day": "Sun", "type": "race", "title": "Manchester Marathon", "distanceKm": 42.2, "steps": [{"amount": "0–5 km", "text": "Settle in at 5:40/km or a touch slower"}, {"amount": "5–32 km", "text": "Lock in at 5:35–5:38/km by your watch"}, {"amount": "32–42.2 km", "text": "Hold form; push if you have it"}], "note": "Fuel every 30–40 minutes from the start. Enjoy it, you’ve earned it."}, {"day": "Any", "type": "easy", "title": "20 min", "label": "Easy", "optional": true, "durationMin": 20, "steps": [{"amount": "20 min", "text": "Very easy, Monday or Tuesday only", "zone": "easy"}]}]}]};
+const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const TYPES = {easy:"Easy",recovery:"Recovery",long:"Long run",mp:"Race pace",tempo:"Tempo",threshold:"Threshold",intervals:"Intervals",test:"Time trial",race:"Race day",rest:"Rest",cross:"Cross-training"};
+const ZONES = ["easy","long","mp","tempo","threshold","intervals","tt"];
+const LEVEL = {easy:1,recovery:1,rest:1,cross:1,long:2,mp:3,tempo:4,threshold:4,intervals:4,test:4,race:4};
+const CLS = {easy:"easy",recovery:"easy",rest:"easy",cross:"easy",long:"long",mp:"mp",tempo:"tempo",threshold:"tempo",intervals:"intervals",test:"test",race:"race"};
+
+function distName(km){
+  if(Math.abs(km-42.195)<0.3) return "marathon";
+  if(Math.abs(km-21.0975)<0.2) return "half marathon";
+  return `${+km.toFixed(2)} km`;
 }
-const ALL = []; for(let w=1;w<=20;w++) sessionsFor(w).forEach(s=>{if(!s.optional) ALL.push(s);});
+function racePaceName(km){
+  if(Math.abs(km-42.195)<0.3) return "Marathon pace";
+  if(Math.abs(km-21.0975)<0.2) return "Half-marathon pace";
+  return "Race pace";
+}
+
+// Check and tidy an uploaded plan. Returns {plan, errors, warnings}.
+function validatePlan(o){
+  const errors=[], warnings=[];
+  if(!o || typeof o!=="object" || Array.isArray(o)) return {errors:["The file isn’t a plan: it needs to be a single JSON object."],warnings};
+  if(o.format && !/^run-plan\/1/.test(o.format)) warnings.push(`Unknown format "${o.format}"; trying anyway.`);
+  const race = o.race||{};
+  if(!race.name) errors.push("race.name is missing.");
+  if(isNaN(parseISO(race.date))) errors.push("race.date must be a date like 2027-04-18.");
+  const dist = +race.distanceKm; if(!(dist>0 && dist<=200)) errors.push("race.distanceKm must be a number, e.g. 42.195.");
+  const target = parseTime(race.targetTime); if(!target) errors.push("race.targetTime must be a time like 3:59:00.");
+  if(!Array.isArray(o.weeks) || !o.weeks.length) errors.push("weeks must be a list with at least one week.");
+  else if(o.weeks.length>52) errors.push("Plans can be at most 52 weeks long.");
+  if(errors.length) return {errors,warnings};
+
+  const n=o.weeks.length, raceT=parseISO(race.date);
+  let start=parseISO(o.startDate);
+  if(isNaN(start)){
+    const raceMon = raceT - ((new Date(raceT).getUTCDay()+6)%7)*DAY;
+    start = raceMon - (n-1)*7*DAY;
+    warnings.push(`No startDate given, so week 1 starts on ${fmtDate(new Date(start),{day:"numeric",month:"short",year:"numeric"})}.`);
+  } else {
+    const off=(new Date(start).getUTCDay()+6)%7;
+    if(off){ start-=off*DAY; warnings.push("startDate wasn’t a Monday, so week 1 now starts on the Monday before it."); }
+  }
+  const lastWeekEnd = start + n*7*DAY;
+  if(raceT < start || raceT >= lastWeekEnd) warnings.push("The race date doesn’t fall within the plan’s final week. Check startDate and the number of weeks.");
+
+  const weeks = o.weeks.map((wk,i)=>{
+    const sessions = (Array.isArray(wk&&wk.sessions)?wk.sessions:[]).map((s,j)=>{
+      const where=`Week ${i+1}, session ${j+1}`;
+      let day = String(s.day||"Any"); day = day.charAt(0).toUpperCase()+day.slice(1,3).toLowerCase();
+      if(day!=="Any" && !DAYS.includes(day)){ warnings.push(`${where}: day "${s.day}" isn’t recognised, so it’s shown as any day.`); day="Any"; }
+      let type = String(s.type||"easy").toLowerCase();
+      if(!TYPES[type]){ warnings.push(`${where}: type "${s.type}" isn’t recognised, so it’s shown as easy.`); type="easy"; }
+      const steps = (Array.isArray(s.steps)?s.steps:[]).map(st=>{
+        const out={amount:String(st.amount||""), text:String(st.text||"")};
+        if(st.zone){ if(ZONES.includes(st.zone)) out.zone=st.zone; else warnings.push(`${where}: pace zone "${st.zone}" isn’t recognised and was left out.`); }
+        return out; });
+      const out={day,type,title:String(s.title|| (s.distanceKm?`${s.distanceKm} km`: s.durationMin?`${s.durationMin} min`:TYPES[type])), steps};
+      if(s.label) out.label=String(s.label);
+      if(s.optional) out.optional=true;
+      if(+s.distanceKm>0) out.distanceKm=+s.distanceKm;
+      if(+s.durationMin>0) out.durationMin=+s.durationMin;
+      if(s.checkpoint){ const cd=+s.checkpoint.distanceKm; if(cd>0) out.checkpoint={distanceKm:cd}; else warnings.push(`${where}: checkpoint needs a distanceKm.`); }
+      if(s.note) out.note=String(s.note);
+      return out; });
+    return {week:i+1, focus:String((wk&&wk.focus)||""), tag:(wk&&wk.tag)?String(wk.tag):"", sessions};
+  });
+  if(!weeks.some(w=>w.sessions.some(s=>s.type==="race"))) warnings.push("No session has type \"race\", so race day won’t be marked on the plan.");
+
+  let baseline=o.baseline||{};
+  const bd=+baseline.distanceKm, bt=parseTime(baseline.time);
+  if(!(bd>0 && bt && plausible(bd*1000,bt))){
+    warnings.push("No valid baseline result, so starting paces assume you’re already at target fitness. Add a recent race under Training paces.");
+    baseline={label:"Target time (no starting result given)", distanceKm:dist, time:mmss(target)};
+  }
+  const id = String(o.id || `${race.name}-${race.date}`).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60) || "plan";
+  const plan = {format:"run-plan/1", id, title:String(o.title||"Training plan"), brand:String(o.brand||"").slice(0,10),
+    race:{name:String(race.name), location:String(race.location||race.name), date:race.date, distanceKm:dist, targetTime:race.targetTime, targetLabel:race.targetLabel?String(race.targetLabel):""},
+    startDate:new Date(start).toISOString().slice(0,10),
+    baseline:{label:String(baseline.label||"Starting result"), distanceKm:+baseline.distanceKm, time:String(baseline.time)},
+    intro:o.intro?String(o.intro):"", phases:Array.isArray(o.phases)?o.phases.filter(p=>p&&p.name&&p.fromWeek&&p.toWeek).map(p=>({name:String(p.name),fromWeek:+p.fromWeek,toWeek:+p.toWeek})):[],
+    notes:Array.isArray(o.notes)?o.notes.filter(x=>x&&x.title).map(x=>({title:String(x.title),text:Array.isArray(x.text)?x.text.map(String):(x.text?[String(x.text)]:[]),bullets:Array.isArray(x.bullets)?x.bullets.map(String):[]})):[],
+    weeks};
+  if(Array.isArray(race.goalPace) && race.goalPace.length===2 && race.goalPace.every(x=>parseTime(x))) plan.race.goalPace=race.goalPace.map(String);
+  return {plan, errors, warnings};
+}
+
+// Turn a plan into what the screens need: dates, ids, long-run distances.
+function compile(plan){
+  const start=parseISO(plan.startDate), n=plan.weeks.length, dist=plan.race.distanceKm, target=parseTime(plan.race.targetTime);
+  let goal;
+  if(plan.race.goalPace){ goal=plan.race.goalPace.map(parseTime).sort((a,b)=>a-b); }
+  else { const p=target/dist; const f=Math.floor((p-3)/5)*5; goal=[f,f+5]; }
+  const weeks = plan.weeks.map((wk,i)=>{
+    const seen={};
+    const sessions = wk.sessions.map(s=>{
+      let key = s.optional ? "opt" : (s.day==="Any" ? "any" : s.day.toLowerCase());
+      seen[key]=(seen[key]||0)+1; if(seen[key]>1) key+=`-${seen[key]}`;
+      const date = s.day==="Any" ? null : new Date(start + (i*7 + DAYS.indexOf(s.day))*DAY);
+      return Object.assign({}, s, {id:`w${i+1}-${key}`, date});
+    }).sort((a,b)=>(a.date?a.date.getTime():9e15)-(b.date?b.date.getTime():9e15));
+    const raceS = sessions.find(s=>s.type==="race");
+    const longKm = raceS ? (raceS.distanceKm||dist) : Math.max(0,...sessions.filter(s=>!s.optional&&["long","test"].includes(s.type)).map(s=>s.distanceKm||0));
+    const longId = raceS ? raceS.id : ((sessions.filter(s=>!s.optional&&["long","test"].includes(s.type)).sort((a,b)=>(b.distanceKm||0)-(a.distanceKm||0))[0]||{}).id);
+    return Object.assign({}, wk, {sessions, longKm, longId, isRace:!!raceS});
+  });
+  return {plan, id:plan.id, n, start, weeks, dist, target, goal, raceT:parseISO(plan.race.date),
+    all: weeks.flatMap(w=>w.sessions).filter(s=>!s.optional && s.type!=="rest")};
+}
+
+const BUILTIN = validatePlan(RAW_BUILTIN).plan;
 
 // ---------- State and persistence ----------
-// Every session entry and result carries `u` (last-edited time) so edits made on
-// different devices merge cleanly: for each item, the most recent edit wins.
-let log = {}, bench = [];
-const LS_KEY = "mcr27-log-v3";
-try{ const raw = localStorage.getItem(LS_KEY); if(raw){ const o=JSON.parse(raw)||{}; log=o.sessions||{}; bench=o.benchmarks||[]; } }catch(e){}
+// One synced document: every uploaded plan, the active plan, and a separate log per plan.
+// Each run entry, result and plan carries `u` (last edited) so devices merge cleanly.
+const LS_KEY = "mcr27-log-v4";
+let S = {v:4, active:{id:BUILTIN.id,u:0}, plans:{}, logs:{}};
+function normalizeState(d){
+  if(!d || typeof d!=="object") return {v:4, active:{id:BUILTIN.id,u:0}, plans:{}, logs:{}};
+  if(d.logs) return {v:4, active:d.active||{id:BUILTIN.id,u:0}, plans:d.plans||{}, logs:d.logs||{}};
+  return {v:4, active:{id:BUILTIN.id,u:0}, plans:{}, logs:{[BUILTIN.id]:{sessions:d.sessions||{}, benchmarks:d.benchmarks||[]}}};
+}
+try{
+  const raw = localStorage.getItem(LS_KEY);
+  if(raw) S = normalizeState(JSON.parse(raw));
+  else { const old = localStorage.getItem("mcr27-log-v3"); if(old) S = normalizeState(JSON.parse(old)); }
+}catch(e){}
 const statusEl = document.getElementById("status");
 function setStatus(html){statusEl.innerHTML = html;}
-const stateObj = () => JSON.parse(JSON.stringify({sessions:log, benchmarks:bench}));
-function saveLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({sessions:log,benchmarks:bench})); }catch(e){} }
-function touch(id, patch){ log[id] = Object.assign({}, log[id]||{}, patch, {u:Date.now()}); }
+const stateObj = () => JSON.parse(JSON.stringify(S));
+function saveLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
 
-function mergeState(a, b){
+function mergeLog(a,b){
+  a=a||{}; b=b||{};
   const sessions = Object.assign({}, a.sessions||{});
   Object.entries(b.sessions||{}).forEach(([k,v])=>{ const cur=sessions[k]; if(!cur || (v.u||0) > (cur.u||0)) sessions[k]=v; });
   const byId = {};
@@ -484,7 +514,34 @@ function mergeState(a, b){
   (b.benchmarks||[]).forEach(x=>{ const cur=byId[x.id]; if(!cur || (x.u||0) > (cur.u||0)) byId[x.id]=x; });
   return {sessions, benchmarks:Object.values(byId)};
 }
+function mergeState(a, b){
+  a=normalizeState(a); b=normalizeState(b);
+  const out={v:4, active:(b.active.u||0) > (a.active.u||0) ? b.active : a.active, plans:Object.assign({},a.plans), logs:{}};
+  Object.entries(b.plans).forEach(([k,v])=>{ const cur=out.plans[k]; if(!cur || (v.u||0)>(cur.u||0)) out.plans[k]=v; });
+  new Set([...Object.keys(a.logs),...Object.keys(b.logs)]).forEach(k=>{ out.logs[k]=mergeLog(a.logs[k],b.logs[k]); });
+  return out;
+}
 
+// ---------- Active plan ----------
+const compiled = {};
+function planList(){
+  const list=[{plan:BUILTIN, builtin:true, u:0}];
+  Object.values(S.plans).forEach(e=>{ if(e && !e.del && e.plan){ const i=list.findIndex(x=>x.plan.id===e.plan.id); if(i>=0) list[i]={plan:e.plan,u:e.u,builtin:list[i].builtin,updated:true}; else list.push({plan:e.plan,u:e.u}); } });
+  return list.sort((a,b)=>parseISO(a.plan.race.date)-parseISO(b.plan.race.date));
+}
+function getCompiled(entry){ const k=entry.plan.id+":"+(entry.u||0); return compiled[k] || (compiled[k]=compile(entry.plan)); }
+let P, log, bench;
+function bindPlan(){
+  const list=planList(); const e=list.find(x=>x.plan.id===S.active.id) || list.find(x=>x.builtin);
+  P = getCompiled(e);
+  S.logs[P.id] = S.logs[P.id] || {sessions:{}, benchmarks:[]};
+  log = S.logs[P.id].sessions; bench = S.logs[P.id].benchmarks;
+}
+function setBench(arr){ S.logs[P.id].benchmarks = arr; bench = arr; }
+function touch(id, patch){ log[id] = Object.assign({}, log[id]||{}, patch, {u:Date.now()}); }
+bindPlan();
+
+// ---------- Supabase sync ----------
 const CFG = window.MCR_CONFIG || {};
 const sb = (window.supabase && CFG.supabaseUrl && CFG.supabaseKey && !/YOUR_/.test(CFG.supabaseUrl+CFG.supabaseKey))
   ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseKey) : null;
@@ -497,7 +554,6 @@ function scheduleSave(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(sync, 1200);
 }
-// Pull the latest copy, merge with this device, push the result back.
 async function sync(){
   saveTimer = null;
   if(!sb || !session) return;
@@ -507,12 +563,12 @@ async function sync(){
   try{
     const { data, error } = await sb.from("training_log").select("data").eq("user_id", session.user.id).maybeSingle();
     if(error) throw error;
-    const remote = (data && data.data) || {sessions:{},benchmarks:[]};
+    const remote = normalizeState(data && data.data);
     const merged = mergeState(remote, stateObj());
     const changedHere = JSON.stringify(merged) !== JSON.stringify(stateObj());
-    log = merged.sessions; bench = merged.benchmarks; saveLocal();
+    S = merged; bindPlan(); saveLocal();
     if(changedHere && !saveTimer) renderAll();
-    if(JSON.stringify(merged) !== JSON.stringify(remote)){
+    if(!data || JSON.stringify(merged) !== JSON.stringify(data.data)){
       const { error: e2 } = await sb.from("training_log").upsert({ user_id: session.user.id, data: merged, updated_at: new Date().toISOString() });
       if(e2) throw e2;
     }
@@ -525,21 +581,447 @@ async function sync(){
   }
 }
 
+// ---------- Plan-dependent helpers ----------
+function currentWeek(){ const w = Math.floor((todayUTC()-P.start)/(7*DAY))+1; return Math.min(P.n,Math.max(1,w)); }
+function weekOfDate(iso){ const t=parseISO(iso); if(isNaN(t)) return 0; const w=Math.floor((t-P.start)/(7*DAY))+1; return w<1?0:Math.min(P.n,w); }
+function phaseOf(w){ const p=P.plan.phases.find(x=>w>=x.fromWeek&&w<=x.toWeek); return p?p.name:""; }
+const targetText = () => P.plan.race.targetLabel || mmss(P.target);
+
+function zones(vd){
+  const rng=(a,b)=>[r5(spk(vFromVO2(b*vd))), r5(spk(vFromVO2(a*vd)))];
+  return { easy:rng(0.66,0.74), long:rng(0.64,0.71), tempo:rng(0.86,0.875), threshold:rng(0.875,0.90), intervals:rng(0.955,1.0), mp:P.goal };
+}
+function zoneText(z, vd, s){
+  if(z==="tt"){
+    const km = (s.checkpoint&&s.checkpoint.distanceKm) || s.distanceKm || 5;
+    const t=predict(vd,km*1000); return `About ${mmss(r5(t/km))}/km (${kmh(t/km)} km/h), around ${mmss(t)} at current fitness`;
+  }
+  const r=zones(vd)[z]; return `${mmss(r[0])}–${mmss(r[1])}/km (${kmh(r[1])}–${kmh(r[0])} km/h)`;
+}
+function results(){
+  const b=P.plan.baseline;
+  const out=[{id:"base",label:b.label,dm:b.distanceKm*1000,sec:parseTime(b.time),week:0}];
+  P.weeks.forEach(wk=>wk.sessions.forEach(s=>{ if(!s.checkpoint) return;
+    const e=log[s.id], dm=s.checkpoint.distanceKm*1000, sec=e&&parseTime(e.tt);
+    if(sec && plausible(dm,sec)) out.push({id:s.id,label:`${distName(s.checkpoint.distanceKm).replace(/^./,c=>c.toUpperCase())} time trial, Week ${wk.week}`,dm,sec,week:wk.week,checkpoint:true}); }));
+  bench.filter(b=>!b.del).forEach(b=>{ const sec=parseTime(b.time); if(sec && plausible(b.dm,sec)) out.push({id:b.id,label:`${b.label}, ${fmtDate(new Date(parseISO(b.date)),{day:"numeric",month:"short",year:"numeric"})}`,dm:b.dm,sec,week:weekOfDate(b.date),manual:true}); });
+  return out.map((r,i)=>Object.assign(r,{seq:i})).sort((a,b)=>a.week-b.week || a.seq-b.seq);
+}
+function resultFor(w){ const rs=results().filter(r=>r.week<=w); return rs[rs.length-1]; }
+function vdotFor(w){ const r=resultFor(w); return vdotFrom(r.dm, r.sec/60); }
+function paceStr(km,time){
+  const sec=parseTime(time), k=parseFloat(km); if(!sec||!k) return "–";
+  const ps=Math.round(sec/k); return `${Math.floor(ps/60)}:${String(ps%60).padStart(2,"0")} /km`;
+}
+const kindLabel = s => s.label || (s.type==="mp" ? racePaceName(P.dist) : TYPES[s.type]);
+
+// ---------- Rendering ----------
+let sel = 1;
+function initialWeek(){ const m=/^#week-(\d+)$/.exec(location.hash); const n=m?+m[1]:0; return n>=1&&n<=P.n?n:currentWeek(); }
+sel = initialWeek();
+
+const ONES=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+const TENS=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+function words(n){ if(n<20) return ONES[n]; if(n<100) return TENS[Math.floor(n/10)]+(n%10?"-"+ONES[n%10]:""); return String(n); }
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+
+function renderChrome(){
+  const r=P.plan.race, raceDate=new Date(P.raceT), loc=`<em>${esc(r.location)}</em>`;
+  const days=Math.round((P.raceT-todayUTC())/DAY);
+  let head;
+  if(days>13){ const w=Math.floor(days/7); head=`${cap(words(w))} weeks to ${loc}`; }
+  else if(days>1) head=`${cap(words(days))} days to ${loc}`;
+  else if(days===1) head=`One day to ${loc}`;
+  else if(days===0) head=`Race day in ${loc}`;
+  else head=`${loc}, done`;
+  document.getElementById("headline").innerHTML=head;
+  document.getElementById("sub").textContent = `${r.name} on ${fmtDate(raceDate,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}. ${P.plan.intro||""}`.trim();
+  const brand = P.plan.brand || (r.location.replace(/[^A-Za-z]/g,"").slice(0,3).toUpperCase()+"/"+r.date.slice(2,4));
+  document.querySelectorAll("[data-brand]").forEach(e=>e.textContent=brand);
+  document.getElementById("planTitle").textContent = P.plan.title;
+  document.getElementById("footMeta").textContent = `${r.name}, ${fmtDate(raceDate,{day:"2-digit",month:"2-digit",year:"numeric"}).replace(/\//g,".")}`;
+  document.title = `${r.name} – ${P.plan.title}`;
+  const started = Date.now()>=P.start;
+  document.getElementById("issue").textContent = days<0 ? "Race complete" : started ? `Week no. ${String(currentWeek()).padStart(2,"0")}` : `Starts ${fmtDate(new Date(P.start),{day:"2-digit",month:"2-digit",year:"numeric"}).replace(/\//g,".")}`;
+  // plan switcher
+  const list=planList(), ps=document.getElementById("planSel");
+  document.getElementById("planbar").hidden = list.length<2;
+  ps.innerHTML = list.map(e=>`<option value="${esc(e.plan.id)}" ${e.plan.id===P.id?"selected":""}>${esc(e.plan.race.name)} (${e.plan.race.date.slice(0,4)})</option>`).join("");
+  // notes
+  document.getElementById("notes").innerHTML = P.plan.notes.length ? P.plan.notes.map(n=>`<h3>${esc(n.title)}</h3>${n.text.map(t=>`<p>${esc(t)}</p>`).join("")}${n.bullets.length?`<ul>${n.bullets.map(b=>`<li>${esc(b)}</li>`).join("")}</ul>`:""}`).join("") : "<p>This plan doesn’t include any notes.</p>";
+  document.getElementById("notesWrap").hidden = false;
+}
+function renderProfile(){
+  const g=document.getElementById("graph"), nums=document.getElementById("wknums"), ph=document.getElementById("phases");
+  const n=P.n, cw=currentWeek(), started = Date.now()>=P.start;
+  const top = Math.max(10, ...P.weeks.map(w=>w.longKm));
+  const step = top>30?10:5, max = Math.ceil(top*1.07/step)*step;
+  let grid="", cols="", nn="", pts=[];
+  for(let k=step;k<max;k+=step) grid+=`<div class="grid" style="bottom:${k/max*100}%"><span>${k}</span></div>`;
+  P.weeks.forEach((wk,i)=>{
+    const w=i+1, km=wk.longKm, done=wk.longId && log[wk.longId] && log[wk.longId].status==="done";
+    const h=km/max*100;
+    pts.push(`${(w-0.5)*100/n},${100-h}`);
+    const cls=["node", wk.isRace?"race":"", done?"done":"", w===sel?"sel":""].join(" ");
+    cols+=`<button class="${cls}" data-w="${w}" aria-label="Week ${w}, ${wk.isRace?"race":"long run"} ${km||0} km${done?", done":""}" aria-pressed="${w===sel}"><span class="km" style="bottom:calc(${h}% + 12px)">${km?+km.toFixed(1):"–"}</span><span class="dot" style="bottom:${h}%"></span></button>`;
+    nn+=`<span class="${started&&w===cw?"now":""}">${String(w).padStart(2,"0")}</span>`;
+  });
+  const gtc=`repeat(${n},1fr)`;
+  g.innerHTML = grid + `<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="${pts.join(" ")}" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.25" vector-effect="non-scaling-stroke"/></svg><div class="cols" style="grid-template-columns:${gtc}">${cols}</div>`;
+  nums.style.gridTemplateColumns=gtc; nums.innerHTML=nn;
+  nums.classList.toggle("dense", n>22);
+  // phases
+  const spans=[]; let w=1;
+  const phases=[...P.plan.phases].sort((a,b)=>a.fromWeek-b.fromWeek);
+  phases.forEach(p=>{ const from=Math.max(p.fromWeek,1), to=Math.min(p.toWeek,n); if(to<from) return; if(from>w) spans.push(["",from-w]); if(from>=w){ spans.push([p.name,to-from+1]); w=to+1; } });
+  if(w<=n && spans.length) spans.push(["",n-w+1]);
+  ph.hidden = !spans.length;
+  ph.style.gridTemplateColumns = spans.map(s=>`${s[1]}fr`).join(" ");
+  ph.innerHTML = spans.map(s=>`<span>${esc(s[0])}</span>`).join("");
+}
+function renderTotals(){
+  const doneN = P.all.filter(s=>log[s.id]&&log[s.id].status==="done").length;
+  let km=0; Object.values(log).forEach(e=>{ if(e&&e.status==="done"){ const k=parseFloat(e.km); if(k) km+=k; }});
+  const longIds=new Set(P.weeks.flatMap(w=>w.sessions.filter(s=>["long","test"].includes(s.type)).map(s=>s.id)));
+  const longest = Math.max(0,...Object.entries(log).filter(([k,e])=>longIds.has(k)&&e.status==="done").map(([k,e])=>parseFloat(e.km)||0));
+  const days = Math.ceil((P.raceT - todayUTC())/DAY);
+  document.getElementById("totals").innerHTML =
+    `<div><span class="cap">Runs done</span><span class="num">${doneN}/${P.all.length}</span></div>
+     <div><span class="cap">Km logged</span><span class="num">${km.toFixed(1)}</span></div>
+     <div><span class="cap">Longest run</span><span class="num">${longest?longest.toFixed(1)+" km":"–"}</span></div>
+     <div><span class="cap">${days>0?"Days to go":"Race day"}</span><span class="num">${days>0?days:"Done"}</span></div>`;
+}
+const LEVELS = {easy:1,long:2,mp:3,tempo:4,threshold:4,intervals:4};
+function meter(n, label){ let s=""; for(let i=1;i<=4;i++){ if(i>1) s+="<b></b>"; s+=`<i class="${i<=n?"on":""}"></i>`; } return `<span class="meter" role="img" aria-label="${label||"Intensity "+n+" of 4"}">${s}</span>`; }
+function renderPaces(){
+  const w=sel, r=resultFor(w), vd=vdotFrom(r.dm,r.sec/60), z=zones(vd);
+  const pm = predict(vd,P.dist*1000);
+  const otherKm = P.dist>30 ? 21.0975 : P.dist>15 ? 10 : 5;
+  let verdict;
+  if(pm<=P.target) verdict=`On track for ${esc(targetText())}.`;
+  else if(pm<=P.target*1.035) verdict=`Close. ${esc(cap(targetText()))} is within reach if training goes well.`;
+  else verdict=`${esc(cap(targetText()))} is a stretch at the moment. Keep building and review at the next checkpoint.`;
+  document.getElementById("fitness").innerHTML = `<div class="fitness">
+      <div><span class="cap">Fig. 02 / Predicted ${esc(distName(P.dist))}</span><span class="num">${mmss(r5(pm))}</span></div>
+      <div><span class="cap">Fig. 03 / Predicted ${esc(distName(otherKm))}</span><span class="num">${mmss(predict(vd,otherKm*1000))}</span></div>
+    </div>
+    <p class="verdict">${verdict}</p>
+    <p class="basis">Based on: ${esc(r.label)}, ${mmss(r.sec)}. Predictions assume you complete the training, so allow a few minutes’ buffer.</p>`;
+  document.getElementById("paceIntro").textContent = `Paces for Week ${w}. Select another week to see the paces in effect then.`;
+  const row=(lv,name,key,feel)=>`<tr><td>${meter(lv)}${name}</td><td class="num">${mmss(z[key][0])}–${mmss(z[key][1])}</td><td>${kmh(z[key][1])}–${kmh(z[key][0])} km/h</td><td>${feel}</td></tr>`;
+  const rp=racePaceName(P.dist);
+  const ps=pm/P.dist, f=Math.floor(ps/5)*5, s=f+5;
+  const gap=Math.round((pm-P.target)/60);
+  document.getElementById("paceBody").innerHTML =
+    row(1,"Easy and recovery","easy","Fully conversational. Slower than you think.")+
+    row(2,"Long run","long","Relaxed and sustainable. Time on feet matters more than speed.")+
+    row(3,`${rp} (goal)`,"mp",`Your fixed target pace, finishing in about ${hmm(P.goal[0]*P.dist)}–${hmm(P.goal[1]*P.dist)}. Comfortably firm.`)+
+    `<tr><td>${meter(3)}${rp} (current fitness)</td><td class="num">${mmss(f)}–${mmss(s)}</td><td>${kmh(s)}–${kmh(f)} km/h</td><td>Estimated finish time: ${mmss(r5(pm))}. The pace your latest result says you could hold today. ${pm<=P.target?"It’s at or faster than your target, so you’re on track.":`It’s ${gap<1?"under a":gap} min${gap>1?"s":""} slower than your target at the moment; this gap should close as your results improve.`}</td></tr>`+
+    row(4,"Tempo","tempo","Steady and strong. Just below threshold.")+
+    row(4,"Threshold","threshold","Controlled discomfort. A few words at a time.")+
+    row(4,"Intervals","intervals","Hard but repeatable. You could do one more rep.")+
+    `<tr><td>Strides</td><td class="num">quicker than intervals</td><td>13+ km/h</td><td>Quick and smooth, never a sprint. 20 seconds each.</td></tr>`;
+  const rs=results(), active=r.id;
+  document.getElementById("results").innerHTML = rs.map(x=>`<li class="${x.id===active?"active":""}"><span>${esc(x.label)}: ${mmss(x.sec)}${x.id===active?" (used for Week "+w+")":""}</span>${x.manual?`<button class="linkbtn" data-rm="${esc(x.id)}">Remove</button>`:""}</li>`).join("")
+    + (rs.some(x=>x.checkpoint)?"":`<li><span style="color:var(--w45)">Checkpoint results appear here once you log them.</span></li>`);
+}
+function stepHTML(st, vd, s){
+  return `<li><span class="amt">${esc(st.amount)}</span><span>${esc(st.text)}${st.zone?`<span class="zp">${esc(zoneText(st.zone,vd,s))}</span>`:""}</span></li>`;
+}
+function sessionHTML(s, vd, i){
+  const e = log[s.id]||{};
+  const st = e.status||"";
+  const dayLabel = s.optional ? "Any day this week" : s.date ? fmtDate(s.date) : "Any day this week";
+  const feelLabels=["Rough","Heavy","OK","Good","Great"];
+  const lv = LEVEL[s.type]||1;
+  const cp = s.checkpoint;
+  return `<article class="session t-${CLS[s.type]||"easy"} ${st?"is-"+st:""}" data-id="${s.id}">
+    <div class="s-top">
+      <div><div class="s-head"><span class="eyebrow" style="color:var(--w72)">${dayLabel}</span>${s.optional?'<span class="flag">Optional</span>':""}${cp?'<span class="flag ink">Checkpoint</span>':""}${meter(lv)}</div>
+        <div class="s-title">${esc(s.title)}</div><div class="s-kind"><span class="idx">${String(i+1).padStart(2,"0")}</span>${esc(kindLabel(s))}</div></div>
+      <div class="actions">
+        <button class="chip ${st==="done"?"on-done":""}" data-act="done" aria-pressed="${st==="done"}">${st==="done"?"✓ Done":"Mark done"}</button>
+        <button class="chip ${st==="skipped"?"on-skip":""}" data-act="skipped" aria-pressed="${st==="skipped"}">${st==="skipped"?"Skipped":"Skip"}</button>
+      </div>
+    </div>
+    ${s.steps.length?`<ul class="steps">${s.steps.map(x=>stepHTML(x,vd,s)).join("")}</ul>`:""}
+    ${s.note?`<p class="s-note">${esc(s.note)}</p>`:""}
+    ${st==="done"?`<div class="log">
+      ${cp?`<label class="wide">Your ${esc(distName(cp.distanceKm))} time-trial time (this updates your paces)<input data-f="tt" data-rerender="1" value="${esc(e.tt)}" placeholder="${cp.distanceKm>15?"e.g. 1:54:30":"e.g. 24:30"}"></label>`:""}
+      <label>${cp?"Total km (inc. warm-up)":"Distance (km)"}<input inputmode="decimal" data-f="km" value="${esc(e.km)}" placeholder="${s.distanceKm||"e.g. 8.2"}"></label>
+      <label>${cp?"Total time":"Time"}<input data-f="time" value="${esc(e.time)}" placeholder="${s.durationMin?s.durationMin:"e.g. 1:45:30"}"></label>
+      <label>Average pace<span class="pace" data-pace>${paceStr(e.km,e.time)}</span></label>
+      <div class="wide"><label>How did it feel?</label><div class="feel" role="group" aria-label="How did it feel">${feelLabels.map((l,i)=>`<button data-feel="${i+1}" class="${+e.feel===i+1?"on":""}" aria-pressed="${+e.feel===i+1}">${l}</button>`).join("")}</div></div>
+      <label class="wide">Notes<textarea rows="2" data-f="note" placeholder="Niggles, weather, fuelling, anything worth remembering">${esc(e.note)}</textarea></label>
+    </div>`:""}
+  </article>`;
+}
+function renderWeek(){
+  const w=sel, wk=P.weeks[w-1], list=wk.sessions, vd=vdotFor(w);
+  const mon=new Date(P.start+(w-1)*7*DAY), sun=new Date(P.start+((w-1)*7+6)*DAY);
+  const counted = list.filter(s=>!s.optional && s.type!=="rest");
+  const done = counted.filter(s=>log[s.id]&&log[s.id].status==="done").length;
+  const started = Date.now()>=P.start, cw=currentWeek(), phase=phaseOf(w);
+  document.getElementById("week").innerHTML = `<p class="eyebrow sec"><span class="idx">01</span>Your week</p>
+    <div class="week-nav">
+      <h2>Week ${String(w).padStart(2,"0")}</h2>
+      <button class="navbtn" data-nav="-1" aria-label="Previous week" ${w===1?"disabled":""}>‹</button>
+      <button class="navbtn" data-nav="1" aria-label="Next week" ${w===P.n?"disabled":""}>›</button>
+    </div>
+    <p class="week-meta"><span class="eyebrow">${fmtDate(mon,{day:"numeric",month:"short"})} – ${fmtDate(sun,{day:"numeric",month:"short",year:"numeric"})}</span>${phase?`<span class="eyebrow">${esc(phase)}</span>`:""}${wk.tag?`<span class="tag">${esc(wk.tag)}</span>`:""}</p>
+    <p class="week-focus">${esc(wk.focus)} <span class="count">${done}/${counted.length} done.</span>
+    ${w!==cw?` <button class="today-link" data-today>${started?"Go to this week":"Go to week 1"}</button>`:""}</p>
+    ${list.length?list.map((s,i)=>sessionHTML(s,vd,i)).join(""):`<p class="week-focus">No sessions this week.</p>`}`;
+}
+function renderPlans(){
+  const list=planList();
+  document.getElementById("planList").innerHTML = list.map(e=>{ const p=e.plan, on=p.id===P.id;
+    return `<li class="${on?"active":""}"><span><span class="pname">${esc(p.race.name)}</span><br>${esc(p.title)}<br><span style="color:var(--w72);font-size:13px">${fmtDate(new Date(parseISO(p.race.date)),{day:"numeric",month:"short",year:"numeric"})}, ${p.weeks.length} weeks${e.builtin?", built in":""}</span></span>
+      <span class="plan-acts">${on?'<span class="flag">Active</span>':`<button class="linkbtn" data-use="${esc(p.id)}">Use this plan</button>`}
+      <button class="linkbtn" data-dlplan="${esc(p.id)}">Download</button>
+      ${!e.builtin||e.updated?`<button class="linkbtn" data-rmplan="${esc(p.id)}">${e.builtin?"Restore original":"Remove"}</button>`:""}</span></li>`; }).join("");
+}
+function renderAll(){ renderChrome(); renderProfile(); renderTotals(); renderWeek(); renderPaces(); renderPlans(); }
+function go(w){ sel=Math.min(P.n,Math.max(1,w)); try{ history.replaceState(null,"","#week-"+sel); }catch(e){} renderProfile(); renderWeek(); renderPaces(); }
+function switchPlan(id){
+  S.active={id,u:Date.now()}; bindPlan(); sel=currentWeek();
+  try{ history.replaceState(null,"","#week-"+sel); }catch(e){}
+  scheduleSave(); renderAll(); window.scrollTo({top:0});
+}
+
+// ---------- Events ----------
+document.getElementById("graph").addEventListener("click",e=>{ const b=e.target.closest(".node"); if(b) go(+b.dataset.w); });
+document.getElementById("planSel").addEventListener("change",e=>switchPlan(e.target.value));
+window.addEventListener("hashchange",()=>{ const m=/^#week-(\d+)$/.exec(location.hash); if(m && +m[1]!==sel && +m[1]>=1 && +m[1]<=P.n){ sel=+m[1]; renderProfile(); renderWeek(); renderPaces(); }});
+const weekEl=document.getElementById("week");
+weekEl.addEventListener("click",e=>{
+  const nav=e.target.closest("[data-nav]"); if(nav){ go(sel+ +nav.dataset.nav); return; }
+  if(e.target.closest("[data-today]")){ go(currentWeek()); return; }
+  const card=e.target.closest(".session"); if(!card) return;
+  const id=card.dataset.id;
+  const act=e.target.closest("[data-act]");
+  if(act){ const cur=log[id]||{}; touch(id,{status: cur.status===act.dataset.act ? "" : act.dataset.act}); scheduleSave(); renderAll(); return; }
+  const f=e.target.closest("[data-feel]");
+  if(f){ const cur=log[id]||{}; const v=+f.dataset.feel; touch(id,{feel: +cur.feel===v?null:v});
+    card.querySelectorAll("[data-feel]").forEach(b=>{const on=+b.dataset.feel===log[id].feel; b.classList.toggle("on",on); b.setAttribute("aria-pressed",on);});
+    scheduleSave(); }
+});
+weekEl.addEventListener("input",e=>{
+  const inp=e.target.closest("[data-f]"); if(!inp) return;
+  const card=inp.closest(".session"), id=card.dataset.id;
+  touch(id,{[inp.dataset.f]:inp.value});
+  const p=card.querySelector("[data-pace]"); if(p) p.textContent=paceStr(log[id].km,log[id].time);
+  if(inp.dataset.f==="km") renderTotals();
+  scheduleSave();
+});
+weekEl.addEventListener("change",e=>{
+  const inp=e.target.closest("[data-rerender]"); if(!inp) return;
+  const card=inp.closest(".session"), id=card.dataset.id;
+  const s=P.weeks.flatMap(w=>w.sessions).find(x=>x.id===id);
+  const dm=(s&&s.checkpoint?s.checkpoint.distanceKm:5)*1000, sec=parseTime(inp.value);
+  if(inp.value && !(sec && plausible(dm,sec))){ inp.setCustomValidity("Check the time. Use mm:ss for shorter distances and h:mm:ss for anything over an hour."); inp.reportValidity(); return; }
+  inp.setCustomValidity("");
+  renderWeek(); renderPaces();
+});
+
+// Add / remove results
+const distSel=document.getElementById("addDist"), otherWrap=document.getElementById("otherWrap"), errEl=document.getElementById("addErr");
+document.getElementById("addDate").value = new Date(todayUTC()).toISOString().slice(0,10);
+distSel.addEventListener("change",()=>{ otherWrap.hidden = distSel.value!=="other"; });
+document.getElementById("addBtn").addEventListener("click",()=>{
+  errEl.textContent="";
+  let dm, label;
+  if(distSel.value==="other"){ const k=parseFloat(document.getElementById("addKm").value); if(!(k>=1 && k<=42.2)){ errEl.textContent="Enter a distance between 1 and 42.2 km."; return; } dm=k*1000; label=`${k} km`; }
+  else { dm=+distSel.value; label=distSel.options[distSel.selectedIndex].text; }
+  const time=document.getElementById("addTime").value.trim(), sec=parseTime(time);
+  if(!sec || !plausible(dm,sec)){ errEl.textContent="Check the time. Use mm:ss for shorter races and h:mm:ss for anything over an hour."; return; }
+  const date=document.getElementById("addDate").value; if(!date){ errEl.textContent="Add the date you ran it."; return; }
+  setBench(bench.concat([{id:"r"+Date.now().toString(36), label, dm, time, date, u:Date.now()}]));
+  document.getElementById("addTime").value="";
+  scheduleSave(); renderWeek(); renderPaces();
+});
+document.getElementById("results").addEventListener("click",e=>{
+  const b=e.target.closest("[data-rm]"); if(!b) return;
+  setBench(bench.map(x=>x.id===b.dataset.rm?Object.assign({},x,{del:true,u:Date.now()}):x)); scheduleSave(); renderWeek(); renderPaces();
+});
+
+// ---------- Plans: upload, paste, switch, remove, AI prompt ----------
+const planMsg=document.getElementById("planMsg");
+function addPlanFromText(text){
+  let obj;
+  const m = String(text).match(/\{[\s\S]*\}/);
+  try{ obj = JSON.parse(m?m[0]:text); }catch(e){ planMsg.innerHTML="That isn’t valid JSON. Make sure you copied the whole code block, from the first { to the last }."; return; }
+  const {plan, errors, warnings} = validatePlan(obj);
+  if(errors.length){ planMsg.innerHTML = "This plan couldn’t be added:<br>"+errors.map(esc).join("<br>"); return; }
+  const existed = planList().some(e=>e.plan.id===plan.id);
+  S.plans[plan.id] = {plan, u:Date.now()};
+  switchPlan(plan.id);
+  planMsg.innerHTML = `${existed?"Updated":"Added"} “${esc(plan.race.name)}” and switched to it.${existed?" Your log for this plan was kept.":""}`
+    + (warnings.length?`<br>Please check:<br>${warnings.slice(0,8).map(esc).join("<br>")}${warnings.length>8?`<br>…and ${warnings.length-8} more.`:""}`:"");
+}
+document.getElementById("planFile").addEventListener("change", async e=>{
+  const file=e.target.files[0]; if(!file) return;
+  addPlanFromText(await file.text()); e.target.value="";
+});
+document.getElementById("planPasteBtn").addEventListener("click",()=>{
+  const t=document.getElementById("planPaste").value.trim();
+  if(!t){ planMsg.textContent="Paste the plan first."; return; }
+  addPlanFromText(t); document.getElementById("planPaste").value="";
+});
+document.getElementById("planList").addEventListener("click",e=>{
+  const use=e.target.closest("[data-use]"); if(use){ switchPlan(use.dataset.use); planMsg.textContent=""; return; }
+  const dl=e.target.closest("[data-dlplan]"); if(dl){ const p=planList().find(x=>x.plan.id===dl.dataset.dlplan).plan; saveFile(`${p.id}.json`, JSON.stringify(p,null,1), "application/json"); return; }
+  const rm=e.target.closest("[data-rmplan]");
+  if(rm){ const id=rm.dataset.rmplan, p=planList().find(x=>x.plan.id===id);
+    const isBuiltin = id===BUILTIN.id;
+    if(!confirm(isBuiltin ? "Go back to the original version of this plan? Your log is kept." : `Remove “${p.plan.race.name}”? Its log stays saved, so re-adding the same plan brings it back.`)) return;
+    S.plans[id]={del:true,u:Date.now()};
+    if(P.id===id && !isBuiltin) S.active={id:BUILTIN.id,u:Date.now()};
+    bindPlan(); sel=Math.min(sel,P.n); scheduleSave(); renderAll(); }
+});
+document.getElementById("aiPrompt").textContent = AI_PROMPT();
+document.getElementById("copyPrompt").addEventListener("click", async ()=>{
+  const t=document.getElementById("aiPrompt").textContent, m=document.getElementById("copyMsg");
+  try{ await navigator.clipboard.writeText(t); m.textContent="Copied. Paste it into Claude, ChatGPT or similar."; }
+  catch(e){ const r=document.createRange(); r.selectNodeContents(document.getElementById("aiPrompt")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); m.textContent="Selected. Use your device’s Copy option."; }
+});
+function AI_PROMPT(){
+  const w = BUILTIN.weeks[5];
+  const example = JSON.stringify({week:w.week, focus:w.focus, tag:w.tag, sessions:w.sessions.slice(0,2)}, null, 1);
+  return `You are an experienced running coach. Please build me a personalised training plan for a race, and then give it to me as a JSON file for my training app.
+
+STEP 1: QUESTIONS FIRST
+Before writing the plan, ask me any questions you need about my current fitness, goals and availability. Wait for my answers. Here is what I can tell you so far:
+- Race name, location, date and distance: [fill in]
+- Target finish time: [fill in]
+- Recent race or time-trial results (distance, time, date): [fill in]
+- Current weekly running (km per week) and longest recent run: [fill in]
+- Days and time I can run each week: [fill in]
+- Injuries or niggles to plan around: [fill in]
+- Date I want the plan to start (a Monday): [fill in]
+
+STEP 2: THE PLAN
+Once we've agreed the plan, output it as ONE JSON code block and nothing else inside the block. Follow this format exactly.
+
+Top-level fields:
+- "format": "run-plan/1"
+- "id": short lowercase id with hyphens, e.g. "berlin-2027"
+- "title": short plan title, e.g. "Sub-3:45 training plan"
+- "brand": short code, up to 8 characters, e.g. "BER/27"
+- "race": {
+    "name": e.g. "Berlin Marathon",
+    "location": the city, shown in the app's headline, e.g. "Berlin",
+    "date": "YYYY-MM-DD",
+    "distanceKm": number (42.195 for a marathon, 21.0975 for a half),
+    "targetTime": "h:mm:ss",
+    "targetLabel": short phrase for the goal, e.g. "sub-3:45",
+    "goalPace": optional ["m:ss", "m:ss"], the fastest and slowest goal race pace per km
+  }
+- "startDate": "YYYY-MM-DD", a Monday. Week 1 starts on this date.
+- "baseline": { "label": e.g. "10 km race, March 2027", "distanceKm": number, "time": "h:mm:ss" or "mm:ss" } — my most recent all-out race or time trial. It sets my starting paces.
+- "intro": one sentence on how the plan is laid out.
+- "phases": [ { "name": e.g. "Base", "fromWeek": 1, "toWeek": 4 }, ... ] covering every week.
+- "notes": coaching notes, each either { "title": "...", "text": ["paragraph", ...] } or { "title": "...", "bullets": ["point", ...] }.
+- "weeks": one entry per week, in order.
+
+Each week:
+- "week": 1, 2, 3...
+- "focus": one sentence on the aim of the week.
+- "tag": optional short label, e.g. "Lighter week" or "Race week".
+- "sessions": the runs that week.
+
+Each session:
+- "day": "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" or "Sun", or "Any" for a flexible day.
+- "type": one of easy, recovery, long, mp (goal race pace), tempo, threshold, intervals, test (a time trial), race, rest, cross (cross-training).
+- "title": what shows in large type, e.g. "45 min" or "18 km".
+- "label": optional, replaces the type's name, e.g. "Pre-race".
+- "optional": true only for optional runs.
+- "distanceKm": for long runs, time trials and the race.
+- "durationMin": for timed sessions.
+- "checkpoint": { "distanceKm": 5 } — ONLY on time-trial sessions. The app uses the result to update my paces.
+- "steps": the parts of the session, each { "amount": e.g. "15 min", "3 × 5 min" or "6 km", "text": what to do, "zone": optional }.
+- "note": optional extra guidance.
+
+Rules:
+- Easy, recovery, tempo, threshold and interval sessions should be time-based (minutes), so they work on a treadmill. Long runs should be distance-based, in km.
+- "zone" links a step to my live training paces, which the app calculates and keeps updated: easy, long, mp, tempo, threshold, intervals, or tt (the time-trial effort, only inside checkpoint sessions). Don't write paces in the text of steps that have a zone; the app adds them.
+- Include 2 or 3 checkpoint time trials spread through the plan (5 km works well), so my paces update as I get fitter.
+- The race itself must be a session with "type": "race" in the final week, on race day.
+- Use plain text inside strings, with no markdown.
+
+Example of one week (shortened):
+${example}`;
+}
+
+// ---------- Backups: CSV export, JSON backup, import ----------
+function saveFile(name, text, type){
+  const blob = new Blob([text], {type}); const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
+}
+const dayCol = s => s.optional ? "Optional" : s.date ? fmtDate(s.date,{weekday:"short"}) : "Any";
+document.getElementById("dlCsv").addEventListener("click",()=>{
+  const rows=[["Week","Day","Date","Session","Status","Distance km","Time","Pace","Time trial","Feel","Notes"]];
+  P.weeks.forEach(wk=>wk.sessions.forEach(s=>{ const e=log[s.id]||{};
+    rows.push([wk.week, dayCol(s), s.date?s.date.toISOString().slice(0,10):"", `${s.title} ${kindLabel(s)}`, e.status||"", e.km||"", e.time||"", e.km&&e.time?paceStr(e.km,e.time):"", e.tt||"", e.feel||"", e.note||""]); }));
+  saveFile(`${P.id}-log.csv`, rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n"), "text/csv");
+});
+document.getElementById("dlJson").addEventListener("click",()=>{
+  saveFile("training-backup.json", JSON.stringify(Object.assign({app:"mcr27"}, stateObj()), null, 1), "application/json");
+});
+function parseCSV(text){
+  const rows=[]; let row=[], cell="", q=false;
+  for(let i=0;i<text.length;i++){ const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){ cell+='"'; i++; } else q=false; } else cell+=c; }
+    else if(c==='"') q=true; else if(c===','){ row.push(cell); cell=""; }
+    else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n') i++; row.push(cell); rows.push(row); row=[]; cell=""; }
+    else cell+=c; }
+  if(cell||row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r=>r.some(x=>x!==""));
+}
+document.getElementById("importFile").addEventListener("change", async e=>{
+  const file=e.target.files[0]; const msg=document.getElementById("importMsg"); if(!file) return;
+  try{
+    const text=await file.text();
+    if(/^\s*\{/.test(text)){
+      const o=JSON.parse(text);
+      if(o.weeks && o.race){ msg.textContent="That’s a plan file. Add it under Your plans instead."; e.target.value=""; return; }
+      S = mergeState(stateObj(), normalizeState(o)); bindPlan(); scheduleSave(); renderAll();
+      msg.textContent="Backup restored and merged with this device.";
+    } else {
+      const rows=parseCSV(text), head=rows.shift().map(x=>x.trim()), col=n=>head.indexOf(n);
+      const sessions={}; const now=Date.now();
+      rows.forEach(r=>{ const w=+r[col("Week")], dname=r[col("Day")]; if(!w||!dname) return;
+        const d = dname==="Optional" ? "opt" : dname==="Any" ? "any" : dname.toLowerCase().slice(0,3);
+        const e2={status:r[col("Status")]||"", km:r[col("Distance km")]||"", time:r[col("Time")]||"", note:r[col("Notes")]||""};
+        if(col("Time trial")>=0) e2.tt=r[col("Time trial")]||"";
+        if(r[col("Feel")]) e2.feel=+r[col("Feel")];
+        Object.keys(e2).forEach(k=>{ if(e2[k]===""&&k!=="status") delete e2[k]; });
+        if(e2.status||Object.keys(e2).length>1){ e2.u=now; sessions[`w${w}-${d}`]=e2; } });
+      const n=Object.keys(sessions).length;
+      S.logs[P.id] = mergeLog(S.logs[P.id], {sessions, benchmarks:[]}); bindPlan();
+      scheduleSave(); renderAll();
+      msg.textContent=`Imported ${n} session${n===1?"":"s"} into ${P.plan.race.name}.`;
+    }
+  }catch(err){ msg.textContent="That file couldn’t be read. Use a CSV exported from this tracker or a backup file."; }
+  e.target.value="";
+});
+
 // ---------- Account UI ----------
 const acctBtn = document.getElementById("acctBtn"), acctPanel = document.getElementById("acctPanel");
 const emailIn = document.getElementById("acctEmail"), codeIn = document.getElementById("acctCode"), acctMsg = document.getElementById("acctMsg");
+const passIn = document.getElementById("acctPass");
 function renderAccount(){
   if(!sb){ acctBtn.hidden = true; acctPanel.hidden = true; return; }
   acctBtn.hidden = false;
   acctBtn.textContent = session ? "Sign out" : "Sign in to sync";
   if(session) acctPanel.hidden = true;
 }
-acctBtn && acctBtn.addEventListener("click", async ()=>{
+acctBtn.addEventListener("click", async ()=>{
   if(session){ await sb.auth.signOut(); return; }
   acctPanel.hidden = !acctPanel.hidden;
   if(!acctPanel.hidden) emailIn.focus();
 });
-const passIn = document.getElementById("acctPass");
 function creds(){
   const email = emailIn.value.trim(), password = passIn.value;
   if(!/^\S+@\S+\.\S+$/.test(email)){ acctMsg.textContent = "Enter your email address."; return null; }
@@ -559,15 +1041,15 @@ document.getElementById("acctSignUp").addEventListener("click", async ()=>{
   if(error){ acctMsg.textContent = `Couldn’t create the account: ${error.message}`; return; }
   acctMsg.textContent = data.session ? "" : "Account created. Check your email for a confirmation link, then come back and sign in.";
 });
-document.getElementById("acctSend") && document.getElementById("acctSend").addEventListener("click", async ()=>{
+document.getElementById("acctSend").addEventListener("click", async ()=>{
   const email = emailIn.value.trim();
   if(!/^\S+@\S+\.\S+$/.test(email)){ acctMsg.textContent = "Enter your email address."; return; }
   acctMsg.textContent = "Sending…";
   const { error } = await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: location.origin + location.pathname } });
-  acctMsg.textContent = error ? `Couldn’t send the email: ${error.message}` : "Check your email. Tap the link, or type the 6-digit code below.";
+  acctMsg.textContent = error ? `Couldn’t send the email: ${error.message}` : "Check your email. Tap the link, or type the code below.";
   if(!error) document.getElementById("codeRow").hidden = false;
 });
-document.getElementById("acctVerify") && document.getElementById("acctVerify").addEventListener("click", async ()=>{
+document.getElementById("acctVerify").addEventListener("click", async ()=>{
   const { error } = await sb.auth.verifyOtp({ email: emailIn.value.trim(), token: codeIn.value.trim(), type: "email" });
   acctMsg.textContent = error ? `That code didn’t work: ${error.message}` : "";
 });
@@ -588,262 +1070,12 @@ async function connect(){
   window.addEventListener("online", ()=>{ if(session) sync(); });
 }
 
-// ---------- Helpers ----------
-const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function parseTime(t){
-  if(!t) return null; const p = String(t).trim().split(":").map(x=>parseFloat(x));
-  if(!p.length || p.some(isNaN)) return null;
-  if(p.length===1) return p[0]*60; if(p.length===2) return p[0]*60+p[1]; if(p.length===3) return p[0]*3600+p[1]*60+p[2]; return null;
-}
-function paceStr(km,time){
-  const sec=parseTime(time), k=parseFloat(km); if(!sec||!k) return "–";
-  const ps=Math.round(sec/k); return `${Math.floor(ps/60)}:${String(ps%60).padStart(2,"0")} /km`;
-}
-const plausible = (dm,sec) => { const p=sec/(dm/1000); return p>=150 && p<=720; };
-const todayUTC = () => { const n=new Date(); return Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()); };
-function currentWeek(){ const w = Math.floor((todayUTC()-START)/(7*DAY))+1; return Math.min(20,Math.max(1,w)); }
-function weekOfDate(iso){ const t=Date.parse(iso); if(isNaN(t)) return 0; const w=Math.floor((t-START)/(7*DAY))+1; return w<1?0:Math.min(20,w); }
-
-// All results that can set paces, oldest first
-function results(){
-  const out=[BASELINE];
-  CHECKPOINTS.forEach(([id,dm,wk,label])=>{ const e=log[id]; const sec=e&&parseTime(e.tt); if(sec && plausible(dm,sec)) out.push({id,label,dm,sec,week:wk,checkpoint:true}); });
-  bench.filter(b=>!b.del).forEach((b,i)=>{ const sec=parseTime(b.time); if(sec && plausible(b.dm,sec)) out.push({id:b.id,label:`${b.label}, ${fmtDate(new Date(Date.parse(b.date)),{day:"numeric",month:"short",year:"numeric"})}`,dm:b.dm,sec,week:weekOfDate(b.date),date:b.date,manual:true,order:i}); });
-  return out.map((r,i)=>Object.assign(r,{seq:i})).sort((a,b)=>a.week-b.week || a.seq-b.seq);
-}
-function resultFor(w){ const rs=results().filter(r=>r.week<=w); return rs[rs.length-1]; }
-function vdotFor(w){ const r=resultFor(w); return vdotFrom(r.dm, r.sec/60); }
-
-// ---------- Rendering ----------
-let sel = (()=>{ const m = /^#week-(\d+)$/.exec(location.hash); const n = m?+m[1]:0; return n>=1&&n<=20?n:currentWeek(); })();
-
-function renderProfile(){
-  const g=document.getElementById("graph"), nums=document.getElementById("wknums");
-  const max=45, cw=currentWeek(), started = Date.now()>=START;
-  let grid="", cols="", n="", pts=[];
-  [10,20,30,40].forEach(k=>{ grid+=`<div class="grid" style="bottom:${k/max*100}%"><span>${k}</span></div>`; });
-  for(let w=1;w<=20;w++){
-    const km = w===20?42.2:SAT[w].km;
-    const id = w===20?"w20-sun":`w${w}-sat`;
-    const done = log[id]&&log[id].status==="done";
-    const h = km/max*100;
-    pts.push(`${(w-0.5)*5},${100-h}`);
-    const cls = ["node", w===20?"race":"", done?"done":"", w===sel?"sel":""].join(" ");
-    cols += `<button class="${cls}" data-w="${w}" aria-label="Week ${w}, long run ${km} km${done?", done":""}" aria-pressed="${w===sel}"><span class="km" style="bottom:calc(${h}% + 12px)">${w===20?"42.2":km}</span><span class="dot" style="bottom:${h}%"></span></button>`;
-    n += `<span class="${started&&w===cw?"now":""}">${String(w).padStart(2,"0")}</span>`;
-  }
-  g.innerHTML = grid + `<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="${pts.join(" ")}" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.25" vector-effect="non-scaling-stroke"/></svg><div class="cols">${cols}</div>`;
-  nums.innerHTML=n;
-  document.getElementById("issue").textContent = started ? `Week no. ${String(cw).padStart(2,"0")}` : "Starts 30.11.2026";
-}
-function renderTotals(){
-  const doneN = ALL.filter(s=>log[s.id]&&log[s.id].status==="done").length;
-  let km=0; Object.values(log).forEach(e=>{ if(e&&e.status==="done"){ const k=parseFloat(e.km); if(k) km+=k; }});
-  const longest = Math.max(0,...Object.entries(log).filter(([k,e])=>/-sat$/.test(k)&&e.status==="done").map(([k,e])=>parseFloat(e.km)||0));
-  const days = Math.ceil((RACE - todayUTC())/DAY);
-  document.getElementById("totals").innerHTML =
-    `<div><span class="cap">Runs done</span><span class="num">${doneN}/${ALL.length}</span></div>
-     <div><span class="cap">Km logged</span><span class="num">${km.toFixed(1)}</span></div>
-     <div><span class="cap">Longest run</span><span class="num">${longest?longest.toFixed(1)+" km":"–"}</span></div>
-     <div><span class="cap">${days>0?"Days to go":"Race day"}</span><span class="num">${days>0?days:"Done"}</span></div>`;
-}
-function renderPaces(){
-  const w=sel, r=resultFor(w), vd=vdotFrom(r.dm,r.sec/60), z=zones(vd);
-  const pm = predict(vd,42195);
-  let verdict;
-  if(pm<=240*60) verdict="On track for sub-4.";
-  else if(pm<=248*60) verdict="Close. Sub-4 is within reach if training goes well.";
-  else verdict="Sub-4 is a stretch at the moment. Keep building and we’ll review at the next checkpoint.";
-  document.getElementById("fitness").innerHTML = `<div class="fitness">
-      <div><span class="cap">Fig. 02 / Predicted marathon</span><span class="num">${mmss(r5(pm))}</span></div>
-      <div><span class="cap">Fig. 03 / Predicted half</span><span class="num">${mmss(predict(vd,HALF))}</span></div>
-    </div>
-    <p class="verdict">${verdict}</p>
-    <p class="basis">Based on: ${esc(r.label)}, ${mmss(r.sec)}. Predictions assume you complete the training, so for a first marathon allow a few minutes’ buffer.</p>`;
-  document.getElementById("paceIntro").textContent = `Paces for Week ${w}. Select another week to see the paces in effect then.`;
-  const row=(lv,name,key,feel)=>`<tr><td>${meter(lv)}${name}</td><td class="num">${mmss(z[key][0])}–${mmss(z[key][1])}</td><td>${kmh(z[key][1])}–${kmh(z[key][0])} km/h</td><td>${feel}</td></tr>`;
-  document.getElementById("paceBody").innerHTML =
-    row(1,"Easy and recovery","easy","Fully conversational. Slower than you think.")+
-    row(2,"Long run","long","Relaxed and sustainable. Time on feet matters more than speed.")+
-    row(3,"Marathon pace (goal)","mp","Comfortably firm. Short sentences only.")+
-    row(4,"Tempo","tempo","Steady and strong. Just below threshold.")+
-    row(4,"Threshold","thr","Controlled discomfort. A few words at a time.")+
-    row(4,"Intervals","int","Hard but repeatable. You could do one more rep.")+
-    `<tr><td>Strides</td><td class="num">quicker than intervals</td><td>13+ km/h</td><td>Quick and smooth, never a sprint. 20 seconds each.</td></tr>`;
-  const rs=results(), active=r.id;
-  document.getElementById("results").innerHTML = rs.map(x=>`<li class="${x.id===active?"active":""}"><span>${esc(x.label)}: ${mmss(x.sec)}${x.id===active?" (used for Week "+w+")":""}</span>${x.manual?`<button class="linkbtn" data-rm="${esc(x.id)}">Remove</button>`:""}</li>`).join("")
-    + (rs.some(x=>x.checkpoint)?"":`<li><span style="color:var(--w45)">Checkpoint results appear here once you log them.</span></li>`);
-}
-const LEVEL = {easy:1,long:2,mp:3,tempo:4,intervals:4,test:4,race:4};
-function meter(n, label){ let s=""; for(let i=1;i<=4;i++){ if(i>1) s+="<b></b>"; s+=`<i class="${i<=n?"on":""}"></i>`; } return `<span class="meter" role="img" aria-label="${label||"Intensity "+n+" of 4"}">${s}</span>`; }
-function stepHTML([a,t,z], vd){
-  return `<li><span class="amt">${esc(a)}</span><span>${esc(t)}${z?`<span class="zp">${esc(zoneText(z,vd))}</span>`:""}</span></li>`;
-}
-function sessionHTML(s, vd, i){
-  const e = log[s.id]||{};
-  const st = e.status||"";
-  const kindLabel = s.kindLabel || KIND[s.k];
-  const dayLabel = s.optional ? "Any day this week" : fmtDate(s.day);
-  const feelLabels=["Rough","Heavy","OK","Good","Great"];
-  const ttDist = s.id.endsWith("-sat") ? "half-marathon" : "5 km";
-  const lv = s.kindLabel==="Recovery"||s.kindLabel==="Pre-race" ? 1 : (LEVEL[s.k]||1);
-  return `<article class="session t-${s.k} ${st?"is-"+st:""}" data-id="${s.id}">
-    <div class="s-top">
-      <div><div class="s-head"><span class="eyebrow" style="color:var(--w72)">${dayLabel}</span>${s.optional?'<span class="flag">Optional</span>':""}${s.checkpoint?'<span class="flag ink">Checkpoint</span>':""}${meter(lv)}</div>
-        <div class="s-title">${esc(s.title)}</div><div class="s-kind"><span class="idx">${String(i+1).padStart(2,"0")}</span>${esc(kindLabel)}</div></div>
-      <div class="actions">
-        <button class="chip ${st==="done"?"on-done":""}" data-act="done" aria-pressed="${st==="done"}">${st==="done"?"✓ Done":"Mark done"}</button>
-        <button class="chip ${st==="skipped"?"on-skip":""}" data-act="skipped" aria-pressed="${st==="skipped"}">${st==="skipped"?"Skipped":"Skip"}</button>
-      </div>
-    </div>
-    <ul class="steps">${s.steps.map(x=>stepHTML(x,vd)).join("")}</ul>
-    ${s.note?`<p class="s-note">${esc(s.note)}</p>`:""}
-    ${st==="done"?`<div class="log">
-      ${s.checkpoint?`<label class="wide">Your ${ttDist} time-trial time (this updates your paces)<input data-f="tt" data-rerender="1" value="${esc(e.tt)}" placeholder="${s.id.endsWith("-sat")?"e.g. 1:54:30":"e.g. 24:30"}"></label>`:""}
-      <label>${s.checkpoint?"Total km (inc. warm-up)":"Distance (km)"}<input inputmode="decimal" data-f="km" value="${esc(e.km)}" placeholder="${s.planKm||"e.g. 8.2"}"></label>
-      <label>${s.checkpoint?"Total time":"Time"}<input data-f="time" value="${esc(e.time)}" placeholder="${s.planMin?s.planMin:"e.g. 1:45:30"}"></label>
-      <label>Average pace<span class="pace" data-pace>${paceStr(e.km,e.time)}</span></label>
-      <div class="wide"><label>How did it feel?</label><div class="feel" role="group" aria-label="How did it feel">${feelLabels.map((l,i)=>`<button data-feel="${i+1}" class="${+e.feel===i+1?"on":""}" aria-pressed="${+e.feel===i+1}">${l}</button>`).join("")}</div></div>
-      <label class="wide">Notes<textarea rows="2" data-f="note" placeholder="Niggles, weather, fuelling, anything worth remembering">${esc(e.note)}</textarea></label>
-    </div>`:""}
-  </article>`;
-}
-function renderWeek(){
-  const w=sel, list=sessionsFor(w), vd=vdotFor(w);
-  const mon=at(w,0), sun=at(w,6);
-  const done = list.filter(s=>!s.optional && log[s.id]&&log[s.id].status==="done").length;
-  const total = list.filter(s=>!s.optional).length;
-  const started = Date.now()>=START;
-  const cw=currentWeek();
-  document.getElementById("week").innerHTML = `<p class="eyebrow sec"><span class="idx">01</span>Your week</p>
-    <div class="week-nav">
-      <h2>Week ${String(w).padStart(2,"0")}</h2>
-      <button class="navbtn" data-nav="-1" aria-label="Previous week" ${w===1?"disabled":""}>‹</button>
-      <button class="navbtn" data-nav="1" aria-label="Next week" ${w===20?"disabled":""}>›</button>
-    </div>
-    <p class="week-meta"><span class="eyebrow">${fmtDate(mon,{day:"numeric",month:"short"})} – ${fmtDate(sun,{day:"numeric",month:"short",year:"numeric"})}</span><span class="eyebrow">${PHASE(w)}</span>${CUTBACK[w]?`<span class="tag">${CUTBACK[w]}</span>`:""}</p>
-    <p class="week-focus">${FOCUS[w]} <span class="count">${done}/${total} done.</span>
-    ${w!==cw?` <button class="today-link" data-today>${started?"Go to this week":"Go to week 1"}</button>`:""}</p>
-    ${list.map((s,i)=>sessionHTML(s,vd,i)).join("")}`;
-}
-function renderAll(){ renderProfile(); renderTotals(); renderWeek(); renderPaces(); }
-function go(w){ sel=Math.min(20,Math.max(1,w)); try{ history.replaceState(null,"","#week-"+sel); }catch(e){} renderProfile(); renderWeek(); renderPaces(); }
-
-// ---------- Events ----------
-document.getElementById("graph").addEventListener("click",e=>{ const b=e.target.closest(".node"); if(b) go(+b.dataset.w); });
-window.addEventListener("hashchange",()=>{ const m=/^#week-(\d+)$/.exec(location.hash); if(m && +m[1]!==sel && +m[1]>=1 && +m[1]<=20){ sel=+m[1]; renderProfile(); renderWeek(); renderPaces(); }});
-const weekEl=document.getElementById("week");
-weekEl.addEventListener("click",e=>{
-  const nav=e.target.closest("[data-nav]"); if(nav){ go(sel+ +nav.dataset.nav); return; }
-  if(e.target.closest("[data-today]")){ go(currentWeek()); return; }
-  const card=e.target.closest(".session"); if(!card) return;
-  const id=card.dataset.id;
-  const act=e.target.closest("[data-act]");
-  if(act){
-    const cur=log[id]||{};
-    const next = cur.status===act.dataset.act ? "" : act.dataset.act;
-    touch(id,{status:next});
-    scheduleSave(); renderAll(); return;
-  }
-  const f=e.target.closest("[data-feel]");
-  if(f){ const cur=log[id]||{}; const v=+f.dataset.feel; touch(id,{feel: +cur.feel===v?null:v});
-    card.querySelectorAll("[data-feel]").forEach(b=>{const on=+b.dataset.feel===log[id].feel; b.classList.toggle("on",on); b.setAttribute("aria-pressed",on);});
-    scheduleSave(); }
-});
-weekEl.addEventListener("input",e=>{
-  const inp=e.target.closest("[data-f]"); if(!inp) return;
-  const card=inp.closest(".session"), id=card.dataset.id;
-  touch(id,{[inp.dataset.f]:inp.value});
-  const p=card.querySelector("[data-pace]"); if(p) p.textContent=paceStr(log[id].km,log[id].time);
-  if(inp.dataset.f==="km") renderTotals();
-  scheduleSave();
-});
-weekEl.addEventListener("change",e=>{
-  const inp=e.target.closest("[data-rerender]"); if(!inp) return;
-  const card=inp.closest(".session"), id=card.dataset.id;
-  const dm = id.endsWith("-sat")?HALF:5000, sec=parseTime(inp.value);
-  if(inp.value && !(sec && plausible(dm,sec))){ inp.setCustomValidity("Check the time. Use mm:ss for 5 km and h:mm:ss for a half."); inp.reportValidity(); return; }
-  inp.setCustomValidity("");
-  renderWeek(); renderPaces();
-});
-
-// Add / remove results
-const distSel=document.getElementById("addDist"), otherWrap=document.getElementById("otherWrap"), errEl=document.getElementById("addErr");
-document.getElementById("addDate").value = new Date(todayUTC()).toISOString().slice(0,10);
-distSel.addEventListener("change",()=>{ otherWrap.hidden = distSel.value!=="other"; });
-document.getElementById("addBtn").addEventListener("click",()=>{
-  errEl.textContent="";
-  let dm, label;
-  if(distSel.value==="other"){ const k=parseFloat(document.getElementById("addKm").value); if(!(k>=1 && k<=42.2)){ errEl.textContent="Enter a distance between 1 and 42.2 km."; return; } dm=k*1000; label=`${k} km`; }
-  else { dm=+distSel.value; label=distSel.options[distSel.selectedIndex].text; }
-  const time=document.getElementById("addTime").value.trim(), sec=parseTime(time);
-  if(!sec || !plausible(dm,sec)){ errEl.textContent="Check the time. Use mm:ss for shorter races and h:mm:ss for anything over an hour."; return; }
-  const date=document.getElementById("addDate").value; if(!date){ errEl.textContent="Add the date you ran it."; return; }
-  bench = bench.concat([{id:"r"+Date.now().toString(36), label, dm, time, date, u:Date.now()}]);
-  document.getElementById("addTime").value="";
-  scheduleSave(); renderWeek(); renderPaces();
-});
-document.getElementById("results").addEventListener("click",e=>{
-  const b=e.target.closest("[data-rm]"); if(!b) return;
-  bench = bench.map(x=>x.id===b.dataset.rm?Object.assign({},x,{del:true,u:Date.now()}):x); scheduleSave(); renderWeek(); renderPaces();
-});
-
-// ---------- Backups: CSV export, JSON backup, import ----------
-function saveFile(name, text, type){
-  const blob = new Blob([text], {type}); const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click();
-  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
-}
-const DAYKEY = {Wed:"wed",Sat:"sat",Sun:"sun",Optional:"opt"};
-document.getElementById("dlCsv").addEventListener("click",()=>{
-  const rows=[["Week","Day","Date","Session","Status","Distance km","Time","Pace","Time trial","Feel","Notes"]];
-  for(let w=1;w<=20;w++) sessionsFor(w).forEach(s=>{ const e=log[s.id]||{};
-    rows.push([w, s.optional?"Optional":fmtDate(s.day,{weekday:"short"}), s.optional?"":s.day.toISOString().slice(0,10), `${s.title} ${s.kindLabel||KIND[s.k]}`, e.status||"", e.km||"", e.time||"", e.km&&e.time?paceStr(e.km,e.time):"", e.tt||"", e.feel||"", e.note||""]); });
-  saveFile("manchester-marathon-log.csv", rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n"), "text/csv");
-});
-document.getElementById("dlJson").addEventListener("click",()=>{
-  saveFile("manchester-marathon-backup.json", JSON.stringify(Object.assign({app:"mcr27",version:3}, stateObj()), null, 1), "application/json");
-});
-function parseCSV(text){
-  const rows=[]; let row=[], cell="", q=false;
-  for(let i=0;i<text.length;i++){ const c=text[i];
-    if(q){ if(c==='"'){ if(text[i+1]==='"'){ cell+='"'; i++; } else q=false; } else cell+=c; }
-    else if(c==='"') q=true; else if(c===','){ row.push(cell); cell=""; }
-    else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n') i++; row.push(cell); rows.push(row); row=[]; cell=""; }
-    else cell+=c; }
-  if(cell||row.length){ row.push(cell); rows.push(row); }
-  return rows.filter(r=>r.some(x=>x!==""));
-}
-document.getElementById("importFile").addEventListener("change", async e=>{
-  const file=e.target.files[0]; const msg=document.getElementById("importMsg"); if(!file) return;
-  try{
-    const text=await file.text(); let incoming;
-    if(/^\s*\{/.test(text)){
-      const o=JSON.parse(text); incoming={sessions:o.sessions||{}, benchmarks:o.benchmarks||[]};
-    } else {
-      const rows=parseCSV(text), head=rows.shift().map(x=>x.trim()), col=n=>head.indexOf(n);
-      const sessions={}; const now=Date.now();
-      rows.forEach(r=>{ const w=+r[col("Week")], d=DAYKEY[r[col("Day")]]; if(!w||!d) return;
-        const e={status:r[col("Status")]||"", km:r[col("Distance km")]||"", time:r[col("Time")]||"", note:r[col("Notes")]||""};
-        if(col("Time trial")>=0) e.tt=r[col("Time trial")]||"";
-        if(r[col("Feel")]) e.feel=+r[col("Feel")];
-        Object.keys(e).forEach(k=>{ if(e[k]===""&&k!=="status") delete e[k]; });
-        if(e.status||Object.keys(e).length>1){ e.u=now; sessions[`w${w}-${d}`]=e; } });
-      incoming={sessions, benchmarks:[]};
-    }
-    const n=Object.keys(incoming.sessions).length;
-    const m=mergeState(stateObj(), incoming); log=m.sessions; bench=m.benchmarks;
-    scheduleSave(); renderAll();
-    msg.textContent=`Imported ${n} session${n===1?"":"s"}.`;
-  }catch(err){ msg.textContent="That file couldn’t be read. Use a CSV exported from this tracker or a backup file."; }
-  e.target.value="";
-});
-
 if("serviceWorker" in navigator && location.protocol==="https:"){ navigator.serviceWorker.register("./sw.js").catch(()=>{}); }
 
 renderAll();
 connect();
 })();
+
 </script>
 </body>
 </html>

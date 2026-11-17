@@ -1,6 +1,6 @@
-# MCR/27: Manchester Marathon training plan
+# Training plan app
 
-A 20-week sub-4 training plan and run log, hosted on GitHub Pages, with your log synced through Supabase. It works offline and can be installed on your phone's home screen.
+A training plan and run log, starting with the Manchester Marathon 2027 plan,, hosted on GitHub Pages, with your log synced through Supabase. It works offline and can be installed on your phone's home screen.
 
 ## What's in this folder
 
@@ -70,6 +70,20 @@ Any parkruns or races you added by hand aren't in that CSV, so add those again u
 ## 7. Lock it down (recommended)
 
 Once your account exists, go to **Authentication → Sign In / Providers** and turn off **Allow new users to sign up**. Your log is private either way, but this stops anyone else creating an account on your project, which matters most if you turned off email confirmation.
+
+
+## Adding a plan for a new race
+
+Plans are JSON files. The Manchester plan is built in, and `plans/manchester-2027.json` is a complete example of the format.
+
+1. In the app, open **Your plans** and tap **Copy prompt**.
+2. Paste it into Claude, ChatGPT or another AI tool, fill in the details about you, and answer its questions.
+3. When it gives you the plan as a JSON code block, copy it, paste it into **Or paste the plan here**, and tap **Add pasted plan**. (Or save it as a `.json` file and use **Upload plan file**.)
+4. The app checks the plan, lists anything it had to adjust, and switches to it. The headline, graph, paces and predictions all follow the new race.
+
+Each plan keeps its own log. Switch plans with the **Plan** menu at the top of the page or under **Your plans**. Adding a plan with the same `id` as an existing one replaces that plan but keeps its log.
+
+Plans are saved in your Supabase account with your log, so there's nothing to upload to GitHub.
 
 ## Updating later
 

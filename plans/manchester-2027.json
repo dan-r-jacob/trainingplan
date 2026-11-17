@@ -1,0 +1,1427 @@
+{
+ "format": "run-plan/1",
+ "id": "manchester-2027",
+ "title": "Sub-4 training plan",
+ "brand": "MCR/27",
+ "race": {
+  "name": "Manchester Marathon",
+  "location": "Manchester",
+  "date": "2027-04-18",
+  "distanceKm": 42.195,
+  "targetTime": "3:59:00",
+  "goalPace": [
+   "5:35",
+   "5:40"
+  ],
+  "targetLabel": "sub-4"
+ },
+ "startDate": "2026-11-30",
+ "baseline": {
+  "label": "Half marathon, autumn 2026 (starting point)",
+  "distanceKm": 21.0975,
+  "time": "2:00:00"
+ },
+ "intro": "Wednesday sessions and Sunday runs are timed so they work on a treadmill; Saturday long runs are in kilometres.",
+ "phases": [
+  {
+   "name": "Base",
+   "fromWeek": 1,
+   "toWeek": 4
+  },
+  {
+   "name": "Build",
+   "fromWeek": 5,
+   "toWeek": 8
+  },
+  {
+   "name": "Marathon build",
+   "fromWeek": 9,
+   "toWeek": 14
+  },
+  {
+   "name": "Peak",
+   "fromWeek": 15,
+   "toWeek": 17
+  },
+  {
+   "name": "Taper",
+   "fromWeek": 18,
+   "toWeek": 20
+  }
+ ],
+ "notes": [
+  {
+   "title": "Easy really means easy",
+   "text": [
+    "Your current easy pace of 6:00–6:30 is on the quick side for your fitness. Keeping easy and long runs in the ranges shown in the pace table is what lets you absorb the hard Wednesday sessions and protects your calves and shins."
+   ]
+  },
+  {
+   "title": "Calves and shins",
+   "bullets": [
+    "The plan builds gradually, with a lighter week every few weeks. Don’t add extra distance on top.",
+    "Prioritise calf raises (straight and bent knee) and tibialis raises in your strength work, and keep heavy leg sessions away from the day before Wednesday’s session or the long run.",
+    "If your calves or shins feel tight after a long run, swap Sunday for 30–40 minutes on a bike or cross-trainer.",
+    "Pain on a specific spot of the shin bone, or pain that gets worse as you run, is a stop signal. Take 2–3 days off, and see a physio if it lasts more than a week.",
+    "Keep an eye on shoe mileage; most trainers need replacing somewhere around 600–800 km."
+   ]
+  },
+  {
+   "title": "When life gets in the way",
+   "bullets": [
+    "Missed a Wednesday? Let it go. Don’t squeeze it into another day.",
+    "Missed a Saturday long run? Do it on Sunday instead of the easy run, never both.",
+    "Ill or injured for more than a week? Repeat the previous week before moving on."
+   ]
+  },
+  {
+   "title": "Fuelling practice",
+   "text": [
+    "From Week 7, take a gel or similar every 30–40 minutes on any run over 90 minutes. Use the long runs to rehearse your race-morning breakfast and kit too. Check which gels the event offers on course and practise with those, or plan to carry your own."
+   ]
+  },
+  {
+   "title": "The optional fourth run",
+   "text": [
+    "From Week 11 there’s an optional easy run. Any day works, ideally Monday or Tuesday. Avoid Friday, the day before the long run. Skipping it is fine; it’s a bonus, not a requirement."
+   ]
+  },
+  {
+   "title": "Race day",
+   "text": [
+    "Sub-4 is 5:41 per km, but GPS usually measures a little long and you won’t run perfect lines, so aim for 5:35–5:38 on your watch. Go out at the slow end for the first 5 km. If you feel good at 32 km, that’s when you can push."
+   ]
+  }
+ ],
+ "weeks": [
+  {
+   "week": 1,
+   "focus": "Settle into the routine. Every run easy apart from a few relaxed strides.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "easy",
+     "title": "40 min",
+     "durationMin": 40,
+     "steps": [
+      {
+       "amount": "28 min",
+       "text": "Easy",
+       "zone": "easy"
+      },
+      {
+       "amount": "6 × 20 s",
+       "text": "Strides, 60 s easy jog between"
+      },
+      {
+       "amount": "4 min",
+       "text": "Easy"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "15 km",
+     "distanceKm": 15,
+     "steps": [
+      {
+       "amount": "15 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "30 min",
+     "label": "Recovery",
+     "durationMin": 30,
+     "steps": [
+      {
+       "amount": "30 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 2,
+   "focus": "First threshold session. Keep the reps controlled; finish feeling you had more.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "threshold",
+     "title": "45 min",
+     "durationMin": 45,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "3 × 5 min",
+       "text": "Threshold, 2 min easy jog between",
+       "zone": "threshold"
+      },
+      {
+       "amount": "11 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "16 km",
+     "distanceKm": 16,
+     "steps": [
+      {
+       "amount": "16 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "35 min",
+     "label": "Recovery",
+     "durationMin": 35,
+     "steps": [
+      {
+       "amount": "35 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 3,
+   "focus": "First long run beyond 16 km. Keep it relaxed.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "threshold",
+     "title": "50 min",
+     "durationMin": 50,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "4 × 5 min",
+       "text": "Threshold, 2 min easy jog between",
+       "zone": "threshold"
+      },
+      {
+       "amount": "9 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "18 km",
+     "distanceKm": 18,
+     "steps": [
+      {
+       "amount": "18 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "35 min",
+     "label": "Recovery",
+     "durationMin": 35,
+     "steps": [
+      {
+       "amount": "35 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 4,
+   "focus": "Christmas week. Lighter on purpose, so enjoy it and don’t make up miles.",
+   "tag": "Christmas week, lighter",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "easy",
+     "title": "40 min",
+     "durationMin": 40,
+     "steps": [
+      {
+       "amount": "28 min",
+       "text": "Easy",
+       "zone": "easy"
+      },
+      {
+       "amount": "6 × 20 s",
+       "text": "Strides, 60 s easy jog between"
+      },
+      {
+       "amount": "4 min",
+       "text": "Easy"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "14 km",
+     "distanceKm": 14,
+     "steps": [
+      {
+       "amount": "14 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "30 min",
+     "label": "Recovery",
+     "durationMin": 30,
+     "steps": [
+      {
+       "amount": "30 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 5,
+   "focus": "Back to it. Longer threshold reps start building your sub-4 engine.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "threshold",
+     "title": "50 min",
+     "durationMin": 50,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "2 × 10 min",
+       "text": "Threshold, 3 min easy jog between",
+       "zone": "threshold"
+      },
+      {
+       "amount": "12 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "19 km",
+     "distanceKm": 19,
+     "steps": [
+      {
+       "amount": "19 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "40 min",
+     "label": "Recovery",
+     "durationMin": 40,
+     "steps": [
+      {
+       "amount": "40 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 6,
+   "focus": "First checkpoint: a 5 km time trial on Wednesday, then 20 km on Saturday.",
+   "tag": "Checkpoint",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "test",
+     "title": "5 km time trial",
+     "durationMin": 50,
+     "checkpoint": {
+      "distanceKm": 5
+     },
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up with 3 × 20 s strides",
+       "zone": "easy"
+      },
+      {
+       "amount": "5 km",
+       "text": "Time trial: even, hard effort, strongest in the last kilometre",
+       "zone": "tt"
+      },
+      {
+       "amount": "10 min",
+       "text": "Easy cool-down",
+       "zone": "easy"
+      }
+     ],
+     "note": "Checkpoint. Log your 5 km time and your paces update from this week on. A flat route or a treadmill at 1% is ideal; a parkrun on Saturday morning doesn’t replace this, as you’ll need your legs for the long run."
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "20 km",
+     "distanceKm": 20,
+     "steps": [
+      {
+       "amount": "18 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      },
+      {
+       "amount": "2 km",
+       "text": "Steady, a little quicker"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "40 min",
+     "label": "Recovery",
+     "durationMin": 40,
+     "steps": [
+      {
+       "amount": "40 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 7,
+   "focus": "22 km long run. Start practising fuelling.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "tempo",
+     "title": "55 min",
+     "durationMin": 55,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "25 min",
+       "text": "Continuous tempo, a touch easier than threshold",
+       "zone": "tempo"
+      },
+      {
+       "amount": "15 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "22 km",
+     "distanceKm": 22,
+     "steps": [
+      {
+       "amount": "22 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ],
+     "note": "Start practising fuelling: something every 30–40 minutes."
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "45 min",
+     "label": "Recovery",
+     "durationMin": 45,
+     "steps": [
+      {
+       "amount": "45 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 8,
+   "focus": "Lighter week. First taste of marathon pace on Wednesday.",
+   "tag": "Lighter week",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "mp",
+     "title": "45 min",
+     "durationMin": 45,
+     "steps": [
+      {
+       "amount": "10 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "20 min",
+       "text": "Marathon pace",
+       "zone": "mp"
+      },
+      {
+       "amount": "15 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "16 km",
+     "distanceKm": 16,
+     "steps": [
+      {
+       "amount": "16 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "30 min",
+     "label": "Recovery",
+     "durationMin": 30,
+     "steps": [
+      {
+       "amount": "30 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 9,
+   "focus": "Into marathon-specific training. 24 km on Saturday.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "intervals",
+     "title": "55 min",
+     "durationMin": 55,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "5 × 4 min",
+       "text": "Interval pace, 2 min easy jog between",
+       "zone": "intervals"
+      },
+      {
+       "amount": "12 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "24 km",
+     "distanceKm": 24,
+     "steps": [
+      {
+       "amount": "24 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "45 min",
+     "label": "Recovery",
+     "durationMin": 45,
+     "steps": [
+      {
+       "amount": "45 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 10,
+   "focus": "First marathon-pace finish to a long run. Stay patient early.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "threshold",
+     "title": "60 min",
+     "durationMin": 60,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "3 × 10 min",
+       "text": "Threshold, 2 min easy jog between",
+       "zone": "threshold"
+      },
+      {
+       "amount": "11 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "26 km",
+     "distanceKm": 26,
+     "steps": [
+      {
+       "amount": "21 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      },
+      {
+       "amount": "5 km",
+       "text": "Marathon pace",
+       "zone": "mp"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "45 min",
+     "label": "Recovery",
+     "durationMin": 45,
+     "steps": [
+      {
+       "amount": "45 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    }
+   ]
+  },
+  {
+   "week": 11,
+   "focus": "40 minutes at marathon pace. The optional fourth run starts this week.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "mp",
+     "title": "60 min",
+     "durationMin": 60,
+     "steps": [
+      {
+       "amount": "10 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "40 min",
+       "text": "Marathon pace",
+       "zone": "mp"
+      },
+      {
+       "amount": "10 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "27 km",
+     "distanceKm": 27,
+     "steps": [
+      {
+       "amount": "27 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "50 min",
+     "label": "Recovery",
+     "durationMin": 50,
+     "steps": [
+      {
+       "amount": "50 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "35 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 35,
+     "steps": [
+      {
+       "amount": "35 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Any day except Friday. Monday or Tuesday is ideal."
+    }
+   ]
+  },
+  {
+   "week": 12,
+   "focus": "Lighter week with your second 5 km checkpoint.",
+   "tag": "Lighter week, checkpoint",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "test",
+     "title": "5 km time trial",
+     "durationMin": 50,
+     "checkpoint": {
+      "distanceKm": 5
+     },
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up with 3 × 20 s strides",
+       "zone": "easy"
+      },
+      {
+       "amount": "5 km",
+       "text": "Time trial: even, hard effort, strongest in the last kilometre",
+       "zone": "tt"
+      },
+      {
+       "amount": "10 min",
+       "text": "Easy cool-down",
+       "zone": "easy"
+      }
+     ],
+     "note": "Checkpoint. Log your 5 km time and your paces update from this week on. A flat route or a treadmill at 1% is ideal; a parkrun on Saturday morning doesn’t replace this, as you’ll need your legs for the long run."
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "18 km",
+     "distanceKm": 18,
+     "steps": [
+      {
+       "amount": "18 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "35 min",
+     "label": "Recovery",
+     "durationMin": 35,
+     "steps": [
+      {
+       "amount": "35 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "30 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 30,
+     "steps": [
+      {
+       "amount": "30 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Any day except Friday. Monday or Tuesday is ideal."
+    }
+   ]
+  },
+  {
+   "week": 13,
+   "focus": "Long run with 6 km at goal pace on tired legs.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "threshold",
+     "title": "60 min",
+     "durationMin": 60,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "2 × 15 min",
+       "text": "Threshold, 3 min easy jog between",
+       "zone": "threshold"
+      },
+      {
+       "amount": "12 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "28 km",
+     "distanceKm": 28,
+     "steps": [
+      {
+       "amount": "22 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      },
+      {
+       "amount": "6 km",
+       "text": "Marathon pace",
+       "zone": "mp"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "50 min",
+     "label": "Recovery",
+     "durationMin": 50,
+     "steps": [
+      {
+       "amount": "50 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "40 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 40,
+     "steps": [
+      {
+       "amount": "40 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Any day except Friday. Monday or Tuesday is ideal."
+    }
+   ]
+  },
+  {
+   "week": 14,
+   "focus": "Your biggest Wednesday at marathon pace, and 30 km on Saturday.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "mp",
+     "title": "60 min",
+     "durationMin": 60,
+     "steps": [
+      {
+       "amount": "10 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "45 min",
+       "text": "Marathon pace",
+       "zone": "mp"
+      },
+      {
+       "amount": "5 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "30 km",
+     "distanceKm": 30,
+     "steps": [
+      {
+       "amount": "30 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "50 min",
+     "label": "Recovery",
+     "durationMin": 50,
+     "steps": [
+      {
+       "amount": "50 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "40 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 40,
+     "steps": [
+      {
+       "amount": "40 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Any day except Friday. Monday or Tuesday is ideal."
+    }
+   ]
+  },
+  {
+   "week": 15,
+   "focus": "Checkpoint. Easy midweek, then a half-marathon time trial.",
+   "tag": "Checkpoint week",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "easy",
+     "title": "40 min",
+     "durationMin": 40,
+     "steps": [
+      {
+       "amount": "28 min",
+       "text": "Easy",
+       "zone": "easy"
+      },
+      {
+       "amount": "6 × 20 s",
+       "text": "Strides, 60 s easy jog between"
+      },
+      {
+       "amount": "4 min",
+       "text": "Easy"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "test",
+     "title": "Half-marathon time trial",
+     "distanceKm": 21.1,
+     "checkpoint": {
+      "distanceKm": 21.0975
+     },
+     "steps": [
+      {
+       "amount": "+ 2 km",
+       "text": "Easy warm-up before you start",
+       "zone": "easy"
+      },
+      {
+       "amount": "21.1 km",
+       "text": "Time trial: even, hard effort",
+       "zone": "tt"
+      }
+     ],
+     "note": "Your big checkpoint. Log your time and paces update for the final weeks. Around 1:55 or quicker means sub-4 is realistic. Enter a local half this weekend if you can find one."
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "30 min",
+     "label": "Recovery",
+     "durationMin": 30,
+     "steps": [
+      {
+       "amount": "30 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Very easy after yesterday’s time trial; walk breaks are fine."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "30 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 30,
+     "steps": [
+      {
+       "amount": "30 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Any day except Friday. Monday or Tuesday is ideal."
+    }
+   ]
+  },
+  {
+   "week": 16,
+   "focus": "10 km at marathon pace in the middle of a 30 km run.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "intervals",
+     "title": "60 min",
+     "durationMin": 60,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "6 × 4 min",
+       "text": "Interval pace, 2 min easy jog between",
+       "zone": "intervals"
+      },
+      {
+       "amount": "11 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "30 km",
+     "distanceKm": 30,
+     "steps": [
+      {
+       "amount": "12 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      },
+      {
+       "amount": "10 km",
+       "text": "Marathon pace",
+       "zone": "mp"
+      },
+      {
+       "amount": "8 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "50 min",
+     "label": "Recovery",
+     "durationMin": 50,
+     "steps": [
+      {
+       "amount": "50 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "45 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 45,
+     "steps": [
+      {
+       "amount": "45 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Any day except Friday. Monday or Tuesday is ideal."
+    }
+   ]
+  },
+  {
+   "week": 17,
+   "focus": "Peak week: 32 km. Treat it as a dress rehearsal.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "threshold",
+     "title": "60 min",
+     "durationMin": 60,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "3 × 10 min",
+       "text": "Threshold, 2 min easy jog between",
+       "zone": "threshold"
+      },
+      {
+       "amount": "11 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "32 km",
+     "distanceKm": 32,
+     "steps": [
+      {
+       "amount": "32 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ],
+     "note": "Your longest run. Full race rehearsal: breakfast, kit, gels."
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "45 min",
+     "label": "Recovery",
+     "durationMin": 45,
+     "steps": [
+      {
+       "amount": "45 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "45 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 45,
+     "steps": [
+      {
+       "amount": "45 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Any day except Friday. Monday or Tuesday is ideal."
+    }
+   ]
+  },
+  {
+   "week": 18,
+   "focus": "Taper begins, but there’s one last 14 km at goal pace.",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "threshold",
+     "title": "50 min",
+     "durationMin": 50,
+     "steps": [
+      {
+       "amount": "15 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "4 × 5 min",
+       "text": "Threshold, 2 min easy jog between",
+       "zone": "threshold"
+      },
+      {
+       "amount": "9 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "26 km",
+     "distanceKm": 26,
+     "steps": [
+      {
+       "amount": "6 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      },
+      {
+       "amount": "14 km",
+       "text": "Marathon pace",
+       "zone": "mp"
+      },
+      {
+       "amount": "6 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "40 min",
+     "label": "Recovery",
+     "durationMin": 40,
+     "steps": [
+      {
+       "amount": "40 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "40 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 40,
+     "steps": [
+      {
+       "amount": "40 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Any day except Friday. Monday or Tuesday is ideal."
+    }
+   ]
+  },
+  {
+   "week": 19,
+   "focus": "Volume drops. Keep a little pace in the legs and sleep well.",
+   "tag": "Taper",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "mp",
+     "title": "45 min",
+     "durationMin": 45,
+     "steps": [
+      {
+       "amount": "10 min",
+       "text": "Easy warm-up"
+      },
+      {
+       "amount": "25 min",
+       "text": "Marathon pace",
+       "zone": "mp"
+      },
+      {
+       "amount": "10 min",
+       "text": "Easy cool-down"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "long",
+     "title": "18 km",
+     "distanceKm": 18,
+     "steps": [
+      {
+       "amount": "18 km",
+       "text": "Easy long-run pace",
+       "zone": "long"
+      }
+     ]
+    },
+    {
+     "day": "Sun",
+     "type": "recovery",
+     "title": "30 min",
+     "label": "Recovery",
+     "durationMin": 30,
+     "steps": [
+      {
+       "amount": "30 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "30 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 30,
+     "steps": [
+      {
+       "amount": "30 min",
+       "text": "Easy",
+       "zone": "easy"
+      }
+     ],
+     "note": "Any day except Friday. Monday or Tuesday is ideal."
+    }
+   ]
+  },
+  {
+   "week": 20,
+   "focus": "Race week. Short and sharp, then rest. The hard work is done.",
+   "tag": "Race week",
+   "sessions": [
+    {
+     "day": "Wed",
+     "type": "mp",
+     "title": "30 min",
+     "durationMin": 30,
+     "steps": [
+      {
+       "amount": "10 min",
+       "text": "Easy"
+      },
+      {
+       "amount": "3 × 3 min",
+       "text": "Marathon pace, 2 min easy jog between",
+       "zone": "mp"
+      },
+      {
+       "amount": "7 min",
+       "text": "Easy"
+      }
+     ]
+    },
+    {
+     "day": "Sat",
+     "type": "rest",
+     "title": "Rest or 15–20 min shakeout",
+     "label": "Pre-race",
+     "steps": [
+      {
+       "amount": "15–20 min",
+       "text": "Very easy jog with 3 × 20 s strides, or rest completely"
+      }
+     ],
+     "note": "Lay out your kit, pin your number, eat a familiar carb-heavy dinner."
+    },
+    {
+     "day": "Sun",
+     "type": "race",
+     "title": "Manchester Marathon",
+     "distanceKm": 42.2,
+     "steps": [
+      {
+       "amount": "0–5 km",
+       "text": "Settle in at 5:40/km or a touch slower"
+      },
+      {
+       "amount": "5–32 km",
+       "text": "Lock in at 5:35–5:38/km by your watch"
+      },
+      {
+       "amount": "32–42.2 km",
+       "text": "Hold form; push if you have it"
+      }
+     ],
+     "note": "Fuel every 30–40 minutes from the start. Enjoy it, you’ve earned it."
+    },
+    {
+     "day": "Any",
+     "type": "easy",
+     "title": "20 min",
+     "label": "Easy",
+     "optional": true,
+     "durationMin": 20,
+     "steps": [
+      {
+       "amount": "20 min",
+       "text": "Very easy, Monday or Tuesday only",
+       "zone": "easy"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
