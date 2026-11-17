@@ -65,15 +65,9 @@ button{font-family:inherit}
 .idx{font-family:var(--font-display);font-weight:400;font-size:1.25em;letter-spacing:0;color:var(--red);margin-right:10px}
 .idx::before{content:"["} .idx::after{content:"]"}
 
-/* Masthead */
-.statusbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--rule-heavy)}
-.statusbar .left{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 .brand{font-family:var(--font-display);font-size:26px;font-weight:400;letter-spacing:.5px;color:var(--red);line-height:1}
-#issue{font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:1.8px;color:var(--ink)}
-@media (max-width:600px){.statusbar{flex-wrap:wrap;row-gap:6px}}
-
 /* Hero */
-.hero{padding:44px 0 36px}
+.hero{padding:12px 0 36px}
 h1{font-family:var(--font-display);font-weight:400;font-size:clamp(64px,15vw,200px);line-height:.88;letter-spacing:-1.5px;text-transform:uppercase;color:var(--red);margin:0;max-width:100%;overflow-wrap:normal;hyphens:none}
 h1 em{font-style:normal}
 .sub{color:var(--ink);margin:26px 0 0;max-width:58ch;font-size:18px;line-height:1.55}
@@ -252,7 +246,7 @@ details.promptbox[open] > summary{margin-bottom:0}
 .how p{margin:0;color:var(--ink-med);max-width:56ch}
 
 @media (max-width:600px){
-  .hero{padding:30px 0 26px}
+  .hero{padding:8px 0 26px}
   .sub{font-size:16px;margin-top:18px}
   .week{margin-top:48px}
   .s-main{gap:14px}
@@ -298,10 +292,6 @@ details.promptbox[open] > summary{margin-bottom:0}
 </head>
 <body>
 <div class="wrap">
-  <div class="statusbar">
-    <div class="left"><span class="brand" data-brand>RUN/LOG</span><span class="eyebrow" id="planTitle">Training plan</span></div>
-    <span class="eyebrow" id="issue">Week no. 01</span>
-  </div>
   <section id="welcome" hidden>
     <header class="hero">
       <h1>Train for your next race.</h1>
@@ -745,11 +735,9 @@ function renderChrome(){
   document.getElementById("sub").textContent = `${r.name} on ${fmtDate(raceDate,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}. ${P.plan.intro||""}`.trim();
   const brand = P.plan.brand || (r.location.replace(/[^A-Za-z]/g,"").slice(0,3).toUpperCase()+"/"+r.date.slice(2,4));
   document.querySelectorAll("[data-brand]").forEach(e=>e.textContent=brand);
-  document.getElementById("planTitle").textContent = P.plan.title;
   document.getElementById("footMeta").textContent = `${r.name}, ${fmtDate(raceDate,{day:"2-digit",month:"2-digit",year:"numeric"}).replace(/\//g,".")}`;
   document.title = `${r.name} – ${P.plan.title}`;
   const started = Date.now()>=P.start;
-  document.getElementById("issue").textContent = days<0 ? "Race complete" : started ? `Week no. ${String(currentWeek()).padStart(2,"0")}` : `Starts ${fmtDate(new Date(P.start),{day:"2-digit",month:"2-digit",year:"numeric"}).replace(/\//g,".")}`;
   // plan switcher
   const list=planList(), ps=document.getElementById("planSel");
   document.getElementById("planbar").hidden = list.length<2;
@@ -914,8 +902,6 @@ function renderGate(){
   document.getElementById("wWho").innerHTML = session ? `Signed in as ${esc(session.user.email||"you")}. <button class="linkbtn" data-signout>Sign out</button>` : "";
   if(showWelcome){
     document.querySelectorAll("[data-brand]").forEach(e=>e.textContent="RUN/LOG");
-    document.getElementById("planTitle").textContent="Training plan and run log";
-    document.getElementById("issue").textContent = needSignIn ? "Welcome" : "Getting started";
     document.title="Training plan and run log";
   }
   return showWelcome;
