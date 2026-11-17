@@ -1,6 +1,6 @@
 # Training plan app
 
-A training plan and run log, starting with the Manchester Marathon 2027 plan,, hosted on GitHub Pages, with your log synced through Supabase. It works offline and can be installed on your phone's home screen.
+A training plan and run log, hosted on GitHub Pages, with your log synced through Supabase. It works offline and can be installed on your phone's home screen.
 
 ## What's in this folder
 
@@ -55,29 +55,24 @@ If `config.js` is left unfilled, the app still works but saves on that device on
 
 Note: on a free GitHub account the repository needs to be public for Pages to work. That means anyone could see the plan itself, but not your log, which only exists in your Supabase account behind sign-in.
 
-## 5. Bring across your existing log
-
-1. In the claude.ai version of the tracker, open **Training paces** and use **Download my log (CSV)**.
-2. In the new app, open **Backup and import**, choose **Import file** and pick that CSV.
-
-Any parkruns or races you added by hand aren't in that CSV, so add those again under **Training paces**. Checkpoint time-trial results do come across.
-
-## 6. Install it on your phone
+## 5. Install it on your phone
 
 - **iPhone:** open the address in Safari, tap **Share → Add to Home Screen**. Open the app from the new icon, tap **Sign in to sync** and sign in with your email and password.
 - **Android:** open the address in Chrome, then use the menu's **Install app** or **Add to Home screen**, open it and sign in.
 
-## 7. Lock it down (recommended)
+## 6. Lock it down (recommended)
 
 Once your account exists, go to **Authentication → Sign In / Providers** and turn off **Allow new users to sign up**. Your log is private either way, but this stops anyone else creating an account on your project, which matters most if you turned off email confirmation.
 
 
 ## Adding a plan for a new race
 
-Plans are JSON files. The Manchester plan is built in, and `plans/manchester-2027.json` is a complete example of the format.
+Plans are JSON files. The app has no plan built in: when someone signs in for the first time, it shows a welcome screen asking them to add their first plan. All plan-specific text (race details, weekly focus, session notes and plan notes) comes from the plan file.
 
-1. In the app, open **Your plans** and tap **Copy prompt**.
-2. Paste it into Claude, ChatGPT or another AI tool, fill in the details about you, and answer its questions.
+1. Open **Your plans** (or the welcome screen, if you have no plans yet) and choose a prompt:
+   - **Create a new plan**: the AI asks about your fitness and goals, then builds a plan.
+   - **Convert a plan you already have**: paste your existing plan after the prompt, and the AI reformats it without changing the training.
+2. Paste the prompt into Claude, ChatGPT or another AI tool and answer its questions.
 3. When it gives you the plan as a JSON code block, copy it, paste it into **Or paste the plan here**, and tap **Add pasted plan**. (Or save it as a `.json` file and use **Upload plan file**.)
 4. The app checks the plan, lists anything it had to adjust, and switches to it. The headline, graph, paces and predictions all follow the new race.
 
@@ -87,7 +82,7 @@ Plans are saved in your Supabase account with your log, so there's nothing to up
 
 ## Updating later
 
-Edit or replace files in the GitHub repository and the app picks up the changes the next time it's opened with a connection. If you ever change the list of files in `sw.js`, also change `CACHE = "mcr27-v1"` to `"mcr27-v2"` so phones refresh their offline copy.
+Edit or replace files in the GitHub repository and the app picks up the changes the next time it's opened with a connection. If you ever change the list of files in `sw.js`, also change `CACHE = "runlog-v2"` to `"runlog-v3"` so phones refresh their offline copy.
 
 ## How syncing works
 

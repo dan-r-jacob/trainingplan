@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="MCR/27">
+<meta name="apple-mobile-web-app-title" content="Run Log">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
@@ -60,6 +60,29 @@ h1 em{font-family:var(--font-italic);font-style:italic;font-weight:400;letter-sp
 .acct{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
 .acct .status{margin-top:0}
 .acct-panel{padding:18px;margin-top:14px}
+#welcome .hero{border-bottom:none;padding-bottom:28px}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.how-step{padding:40px 16px 16px}
+.how-step .cap.top{position:absolute;top:14px;left:14px;margin:0}
+.how-step svg{width:100%;height:auto;max-height:90px;display:block}
+.how-step .figcap{margin-top:12px}
+.wstep{margin-top:28px}
+#stepLoading{padding:18px}
+#stepPlan{padding:18px}
+#stepPlan p{color:var(--w72);max-width:62ch}
+.wwho{font-size:13px;margin:0 0 12px}
+.promptbox{border:none;background:none;padding:6px 0 0;margin:0}
+.prompts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.prompt-card{background:var(--cobalt);padding:16px;border-color:rgba(255,255,255,.4)}
+.prompt-card .cap{margin:0}
+.pc-title{font-family:var(--font-display);font-size:20px;font-weight:500;letter-spacing:-.3px;margin:10px 0 6px;color:var(--white)}
+.pc-text{font-size:14px;color:var(--w72);margin:0 0 14px}
+#stepPlan .pc-text{color:var(--w72)}
+.prompt-card .chip{display:inline-block}
+@media (max-width:600px){.prompts{grid-template-columns:1fr}.prompt-card .chip{display:block;text-align:center}}
+.promptbox summary{font-family:var(--font-body);font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--w72);text-decoration:underline}
+.promptbox summary::after{content:""}
+@media (max-width:600px){.how{grid-template-columns:1fr;gap:8px}.how-step{padding:34px 14px 12px}.how-step svg{max-height:40px}.how-step .figcap{margin-top:8px;padding-top:8px}}
 .planbar{display:flex;align-items:center;gap:10px;margin:0 0 22px}
 .planbar select{font:inherit;font-size:15px;color:var(--white);background:var(--deep);border:1px solid rgba(255,255,255,.45);border-radius:0;padding:8px 10px;min-height:42px;max-width:100%}
 .plans li{flex-direction:column;gap:10px;padding:14px 0}
@@ -240,19 +263,19 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
 <body>
 <div class="wrap">
   <div class="statusbar">
-    <div class="left"><span class="brand" data-brand>MCR/27</span><span class="eyebrow" id="planTitle">Training plan</span></div>
+    <div class="left"><span class="brand" data-brand>RUN/LOG</span><span class="eyebrow" id="planTitle">Training plan</span></div>
     <span class="eyebrow" id="issue">Week no. 01</span>
   </div>
-  <header class="hero">
-    <div class="planbar" id="planbar" hidden><label class="eyebrow" for="planSel">Plan</label><select id="planSel"></select></div>
-    <h1 id="headline">Training plan</h1>
-    <p class="sub" id="sub"></p>
-    <div class="acct">
-      <div class="status" id="status" role="status">Loading your log…</div>
-      <button class="chip" id="acctBtn" hidden>Sign in to sync</button>
-    </div>
-    <div class="acct-panel tile" id="acctPanel" hidden>
-      <p class="eyebrow" style="margin:0 0 10px">Sign in to sync your log across devices</p>
+  <section id="welcome" hidden>
+    <header class="hero">
+      <h1>Train for your next <em>race</em></h1>
+      <p class="sub">A training plan and run log that sets your paces from your own results and updates them as you get fitter. Sessions work outdoors or on a treadmill, and your log syncs across your devices.</p>
+    </header>
+    <div id="stepLoading" class="tile wstep" hidden><p class="cap">Loading your plans…</p></div>
+
+    <div id="stepSignIn" class="wstep" hidden>
+    <div class="acct-panel tile" id="acctPanel">
+      <p class="cap" style="margin:0 0 14px"><span class="idx" style="color:var(--white)">01</span>Sign in or create an account</p>
       <div class="addform" style="margin-top:0">
         <label>Email<input id="acctEmail" type="email" autocomplete="username" inputmode="email" placeholder="you@example.com"></label>
         <label>Password<input id="acctPass" type="password" autocomplete="current-password" placeholder="8+ characters"></label>
@@ -267,6 +290,40 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
         <button class="chip" id="acctVerify">Sign in with code</button>
       </div>
       <p class="err" id="acctMsg" role="status"></p>
+    </div>
+    </div>
+
+    <div id="stepPlan" class="tile wstep" hidden>
+      <p class="cap" style="margin:0 0 6px"><span class="idx" style="color:var(--white)">02</span>Add your first plan</p>
+      <p class="wwho" id="wWho"></p>
+      <p>Get your plan in the right format using Claude, ChatGPT or another AI tool. Choose a prompt, copy it into the AI tool and follow its questions, then paste the plan it gives you below.</p>
+      <div class="prompts" id="wPrompts"></div>
+      <div class="log" style="border-top:none;padding-top:0;margin-top:18px">
+        <label class="wide">Paste the plan the AI gave you<textarea id="wPlanPaste" rows="5" placeholder="Paste the JSON code block here"></textarea></label>
+      </div>
+      <div class="actions" style="margin-top:10px">
+        <button class="chip" id="wPlanPasteBtn">Add plan</button>
+        <label class="chip" for="wPlanFile" style="cursor:pointer">Or upload a plan file</label>
+        <input type="file" id="wPlanFile" accept=".json,application/json,text/plain" hidden>
+      </div>
+      <p class="err" id="wPlanMsg" role="status"></p>
+    </div>
+    <div class="how" style="margin-top:40px">
+      <div class="tile how-step"><p class="cap top">Fig. 01</p><svg viewBox="0 0 120 60" aria-hidden="true"><polyline points="10,48 35,30 60,38 85,16 110,22" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1"/><circle cx="10" cy="48" r="3.5" fill="#fff"/><circle cx="35" cy="30" r="3.5" fill="var(--deep)" stroke="#fff"/><circle cx="60" cy="38" r="3.5" fill="#fff"/><circle cx="85" cy="16" r="3.5" fill="var(--deep)" stroke="#fff"/><circle cx="110" cy="22" r="5" fill="#fff"/></svg><p class="figcap"><span class="idx">01</span>Create a plan with an AI tool, or convert one you already have</p></div>
+      <div class="tile how-step"><p class="cap top">Fig. 02</p><svg viewBox="0 0 120 60" aria-hidden="true"><line x1="10" y1="30" x2="110" y2="30" stroke="rgba(255,255,255,.55)"/><circle cx="10" cy="30" r="3.5" fill="#fff"/><circle cx="35" cy="30" r="3.5" fill="#fff"/><circle cx="60" cy="30" r="3.5" fill="#fff"/><circle cx="85" cy="30" r="3.5" fill="var(--deep)" stroke="#fff"/><circle cx="110" cy="30" r="3.5" fill="var(--deep)" stroke="#fff"/></svg><p class="figcap"><span class="idx">02</span>Log each run: distance, time and how it felt</p></div>
+      <div class="tile how-step"><p class="cap top">Fig. 03</p><svg viewBox="0 0 120 60" aria-hidden="true"><line x1="20" y1="48" x2="60" y2="14" stroke="rgba(255,255,255,.55)"/><line x1="60" y1="14" x2="100" y2="40" stroke="rgba(255,255,255,.55)"/><line x1="20" y1="48" x2="100" y2="40" stroke="rgba(255,255,255,.3)"/><circle cx="20" cy="48" r="3.5" fill="#fff"/><circle cx="60" cy="14" r="5" fill="#fff"/><circle cx="100" cy="40" r="3.5" fill="var(--deep)" stroke="#fff"/></svg><p class="figcap"><span class="idx">03</span>Time trials update every pace and your predicted finish</p></div>
+    </div>
+
+  </section>
+
+  <div id="app" hidden>
+  <header class="hero">
+    <div class="planbar" id="planbar" hidden><label class="eyebrow" for="planSel">Plan</label><select id="planSel"></select></div>
+    <h1 id="headline">Training plan</h1>
+    <p class="sub" id="sub"></p>
+    <div class="acct">
+      <div class="status" id="status" role="status">Loading your log…</div>
+      <button class="chip" id="acctBtn" hidden>Sign out</button>
     </div>
   </header>
 
@@ -291,7 +348,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
         <thead><tr><th>Effort</th><th>Pace per km</th><th>Treadmill</th><th>How it should feel</th></tr></thead>
         <tbody id="paceBody"></tbody>
       </table></div>
-      <p>On a treadmill, set a 1% incline to match outdoor effort. Goal marathon pace stays fixed at sub-4. Current-fitness marathon pace and the other paces follow your latest result.</p>
+      <p>On a treadmill, set a 1% incline to match outdoor effort. Goal race pace stays fixed at your plan’s target. Current-fitness race pace and the other paces follow your latest result.</p>
       <p class="eyebrow" style="margin:28px 0 0">Results used for your paces</p>
       <ul class="results" id="results"></ul>
       <p style="margin:12px 0 0">Ran a parkrun or a race? Add it here and paces from that week onwards will update.</p>
@@ -306,7 +363,7 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
     </details>
 
     <details id="notesWrap">
-      <summary><span class="idx">03</span>Coach’s notes</summary>
+      <summary><span class="idx">03</span>Plan notes</summary>
       <div class="notes" id="notes"></div>
     </details>
 
@@ -336,14 +393,13 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--white);displa
       </div>
       <div class="actions" style="margin-top:10px"><button class="chip" id="planPasteBtn">Add pasted plan</button></div>
       <p class="err" id="planMsg" role="status"></p>
-      <p class="eyebrow" style="margin:26px 0 6px">Create a plan with an AI tool</p>
-      <p>Copy this prompt into Claude, ChatGPT or another AI tool. Fill in the details about you, answer its questions, and it will give you a plan in the right format to paste above.</p>
-      <div class="actions" style="margin-top:10px"><button class="chip" id="copyPrompt">Copy prompt</button></div>
-      <p class="err" id="copyMsg" role="status"></p>
-      <pre class="prompt" id="aiPrompt"></pre>
+      <p class="eyebrow" style="margin:26px 0 6px">Prompts for AI tools</p>
+      <p>Use one of these with Claude, ChatGPT or another AI tool to get a plan in the right format, then paste the result above.</p>
+      <div class="prompts" id="prompts"></div>
     </details>
   </section>
-  <footer><span class="brand" style="font-size:14px" data-brand>MCR/27</span><span class="eyebrow" id="footMeta"></span></footer>
+  </div>
+  <footer><span class="brand" style="font-size:14px" data-brand>RUN/LOG</span><span class="eyebrow" id="footMeta"></span></footer>
 </div>
 
 <script>
@@ -374,12 +430,19 @@ function fmtDate(d,o){return d.toLocaleDateString("en-GB",Object.assign({timeZon
 const parseISO = s => /^\d{4}-\d{2}-\d{2}$/.test(s||"") ? Date.parse(s+"T00:00:00Z") : NaN;
 
 // ---------- Plans ----------
-const RAW_BUILTIN = {"format": "run-plan/1", "id": "manchester-2027", "title": "Sub-4 training plan", "brand": "MCR/27", "race": {"name": "Manchester Marathon", "location": "Manchester", "date": "2027-04-18", "distanceKm": 42.195, "targetTime": "3:59:00", "goalPace": ["5:35", "5:40"], "targetLabel": "sub-4"}, "startDate": "2026-11-30", "baseline": {"label": "Half marathon, autumn 2026 (starting point)", "distanceKm": 21.0975, "time": "2:00:00"}, "intro": "Wednesday sessions and Sunday runs are timed so they work on a treadmill; Saturday long runs are in kilometres.", "phases": [{"name": "Base", "fromWeek": 1, "toWeek": 4}, {"name": "Build", "fromWeek": 5, "toWeek": 8}, {"name": "Marathon build", "fromWeek": 9, "toWeek": 14}, {"name": "Peak", "fromWeek": 15, "toWeek": 17}, {"name": "Taper", "fromWeek": 18, "toWeek": 20}], "notes": [{"title": "Easy really means easy", "text": ["Your current easy pace of 6:00–6:30 is on the quick side for your fitness. Keeping easy and long runs in the ranges shown in the pace table is what lets you absorb the hard Wednesday sessions and protects your calves and shins."]}, {"title": "Calves and shins", "bullets": ["The plan builds gradually, with a lighter week every few weeks. Don’t add extra distance on top.", "Prioritise calf raises (straight and bent knee) and tibialis raises in your strength work, and keep heavy leg sessions away from the day before Wednesday’s session or the long run.", "If your calves or shins feel tight after a long run, swap Sunday for 30–40 minutes on a bike or cross-trainer.", "Pain on a specific spot of the shin bone, or pain that gets worse as you run, is a stop signal. Take 2–3 days off, and see a physio if it lasts more than a week.", "Keep an eye on shoe mileage; most trainers need replacing somewhere around 600–800 km."]}, {"title": "When life gets in the way", "bullets": ["Missed a Wednesday? Let it go. Don’t squeeze it into another day.", "Missed a Saturday long run? Do it on Sunday instead of the easy run, never both.", "Ill or injured for more than a week? Repeat the previous week before moving on."]}, {"title": "Fuelling practice", "text": ["From Week 7, take a gel or similar every 30–40 minutes on any run over 90 minutes. Use the long runs to rehearse your race-morning breakfast and kit too. Check which gels the event offers on course and practise with those, or plan to carry your own."]}, {"title": "The optional fourth run", "text": ["From Week 11 there’s an optional easy run. Any day works, ideally Monday or Tuesday. Avoid Friday, the day before the long run. Skipping it is fine; it’s a bonus, not a requirement."]}, {"title": "Race day", "text": ["Sub-4 is 5:41 per km, but GPS usually measures a little long and you won’t run perfect lines, so aim for 5:35–5:38 on your watch. Go out at the slow end for the first 5 km. If you feel good at 32 km, that’s when you can push."]}], "weeks": [{"week": 1, "focus": "Settle into the routine. Every run easy apart from a few relaxed strides.", "sessions": [{"day": "Wed", "type": "easy", "title": "40 min", "durationMin": 40, "steps": [{"amount": "28 min", "text": "Easy", "zone": "easy"}, {"amount": "6 × 20 s", "text": "Strides, 60 s easy jog between"}, {"amount": "4 min", "text": "Easy"}]}, {"day": "Sat", "type": "long", "title": "15 km", "distanceKm": 15, "steps": [{"amount": "15 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 2, "focus": "First threshold session. Keep the reps controlled; finish feeling you had more.", "sessions": [{"day": "Wed", "type": "threshold", "title": "45 min", "durationMin": 45, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "3 × 5 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "11 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "16 km", "distanceKm": 16, "steps": [{"amount": "16 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "35 min", "label": "Recovery", "durationMin": 35, "steps": [{"amount": "35 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 3, "focus": "First long run beyond 16 km. Keep it relaxed.", "sessions": [{"day": "Wed", "type": "threshold", "title": "50 min", "durationMin": 50, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "4 × 5 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "9 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "18 km", "distanceKm": 18, "steps": [{"amount": "18 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "35 min", "label": "Recovery", "durationMin": 35, "steps": [{"amount": "35 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 4, "focus": "Christmas week. Lighter on purpose, so enjoy it and don’t make up miles.", "tag": "Christmas week, lighter", "sessions": [{"day": "Wed", "type": "easy", "title": "40 min", "durationMin": 40, "steps": [{"amount": "28 min", "text": "Easy", "zone": "easy"}, {"amount": "6 × 20 s", "text": "Strides, 60 s easy jog between"}, {"amount": "4 min", "text": "Easy"}]}, {"day": "Sat", "type": "long", "title": "14 km", "distanceKm": 14, "steps": [{"amount": "14 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 5, "focus": "Back to it. Longer threshold reps start building your sub-4 engine.", "sessions": [{"day": "Wed", "type": "threshold", "title": "50 min", "durationMin": 50, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "2 × 10 min", "text": "Threshold, 3 min easy jog between", "zone": "threshold"}, {"amount": "12 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "19 km", "distanceKm": 19, "steps": [{"amount": "19 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "40 min", "label": "Recovery", "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 6, "focus": "First checkpoint: a 5 km time trial on Wednesday, then 20 km on Saturday.", "tag": "Checkpoint", "sessions": [{"day": "Wed", "type": "test", "title": "5 km time trial", "durationMin": 50, "checkpoint": {"distanceKm": 5}, "steps": [{"amount": "15 min", "text": "Easy warm-up with 3 × 20 s strides", "zone": "easy"}, {"amount": "5 km", "text": "Time trial: even, hard effort, strongest in the last kilometre", "zone": "tt"}, {"amount": "10 min", "text": "Easy cool-down", "zone": "easy"}], "note": "Checkpoint. Log your 5 km time and your paces update from this week on. A flat route or a treadmill at 1% is ideal; a parkrun on Saturday morning doesn’t replace this, as you’ll need your legs for the long run."}, {"day": "Sat", "type": "long", "title": "20 km", "distanceKm": 20, "steps": [{"amount": "18 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "2 km", "text": "Steady, a little quicker"}]}, {"day": "Sun", "type": "recovery", "title": "40 min", "label": "Recovery", "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 7, "focus": "22 km long run. Start practising fuelling.", "sessions": [{"day": "Wed", "type": "tempo", "title": "55 min", "durationMin": 55, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "25 min", "text": "Continuous tempo, a touch easier than threshold", "zone": "tempo"}, {"amount": "15 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "22 km", "distanceKm": 22, "steps": [{"amount": "22 km", "text": "Easy long-run pace", "zone": "long"}], "note": "Start practising fuelling: something every 30–40 minutes."}, {"day": "Sun", "type": "recovery", "title": "45 min", "label": "Recovery", "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 8, "focus": "Lighter week. First taste of marathon pace on Wednesday.", "tag": "Lighter week", "sessions": [{"day": "Wed", "type": "mp", "title": "45 min", "durationMin": 45, "steps": [{"amount": "10 min", "text": "Easy warm-up"}, {"amount": "20 min", "text": "Marathon pace", "zone": "mp"}, {"amount": "15 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "16 km", "distanceKm": 16, "steps": [{"amount": "16 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 9, "focus": "Into marathon-specific training. 24 km on Saturday.", "sessions": [{"day": "Wed", "type": "intervals", "title": "55 min", "durationMin": 55, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "5 × 4 min", "text": "Interval pace, 2 min easy jog between", "zone": "intervals"}, {"amount": "12 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "24 km", "distanceKm": 24, "steps": [{"amount": "24 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "45 min", "label": "Recovery", "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 10, "focus": "First marathon-pace finish to a long run. Stay patient early.", "sessions": [{"day": "Wed", "type": "threshold", "title": "60 min", "durationMin": 60, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "3 × 10 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "11 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "26 km", "distanceKm": 26, "steps": [{"amount": "21 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "5 km", "text": "Marathon pace", "zone": "mp"}]}, {"day": "Sun", "type": "recovery", "title": "45 min", "label": "Recovery", "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}]}, {"week": 11, "focus": "40 minutes at marathon pace. The optional fourth run starts this week.", "sessions": [{"day": "Wed", "type": "mp", "title": "60 min", "durationMin": 60, "steps": [{"amount": "10 min", "text": "Easy warm-up"}, {"amount": "40 min", "text": "Marathon pace", "zone": "mp"}, {"amount": "10 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "27 km", "distanceKm": 27, "steps": [{"amount": "27 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "50 min", "label": "Recovery", "durationMin": 50, "steps": [{"amount": "50 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "35 min", "label": "Easy", "optional": true, "durationMin": 35, "steps": [{"amount": "35 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 12, "focus": "Lighter week with your second 5 km checkpoint.", "tag": "Lighter week, checkpoint", "sessions": [{"day": "Wed", "type": "test", "title": "5 km time trial", "durationMin": 50, "checkpoint": {"distanceKm": 5}, "steps": [{"amount": "15 min", "text": "Easy warm-up with 3 × 20 s strides", "zone": "easy"}, {"amount": "5 km", "text": "Time trial: even, hard effort, strongest in the last kilometre", "zone": "tt"}, {"amount": "10 min", "text": "Easy cool-down", "zone": "easy"}], "note": "Checkpoint. Log your 5 km time and your paces update from this week on. A flat route or a treadmill at 1% is ideal; a parkrun on Saturday morning doesn’t replace this, as you’ll need your legs for the long run."}, {"day": "Sat", "type": "long", "title": "18 km", "distanceKm": 18, "steps": [{"amount": "18 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "35 min", "label": "Recovery", "durationMin": 35, "steps": [{"amount": "35 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "30 min", "label": "Easy", "optional": true, "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 13, "focus": "Long run with 6 km at goal pace on tired legs.", "sessions": [{"day": "Wed", "type": "threshold", "title": "60 min", "durationMin": 60, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "2 × 15 min", "text": "Threshold, 3 min easy jog between", "zone": "threshold"}, {"amount": "12 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "28 km", "distanceKm": 28, "steps": [{"amount": "22 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "6 km", "text": "Marathon pace", "zone": "mp"}]}, {"day": "Sun", "type": "recovery", "title": "50 min", "label": "Recovery", "durationMin": 50, "steps": [{"amount": "50 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "40 min", "label": "Easy", "optional": true, "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 14, "focus": "Your biggest Wednesday at marathon pace, and 30 km on Saturday.", "sessions": [{"day": "Wed", "type": "mp", "title": "60 min", "durationMin": 60, "steps": [{"amount": "10 min", "text": "Easy warm-up"}, {"amount": "45 min", "text": "Marathon pace", "zone": "mp"}, {"amount": "5 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "30 km", "distanceKm": 30, "steps": [{"amount": "30 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "50 min", "label": "Recovery", "durationMin": 50, "steps": [{"amount": "50 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "40 min", "label": "Easy", "optional": true, "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 15, "focus": "Checkpoint. Easy midweek, then a half-marathon time trial.", "tag": "Checkpoint week", "sessions": [{"day": "Wed", "type": "easy", "title": "40 min", "durationMin": 40, "steps": [{"amount": "28 min", "text": "Easy", "zone": "easy"}, {"amount": "6 × 20 s", "text": "Strides, 60 s easy jog between"}, {"amount": "4 min", "text": "Easy"}]}, {"day": "Sat", "type": "test", "title": "Half-marathon time trial", "distanceKm": 21.1, "checkpoint": {"distanceKm": 21.0975}, "steps": [{"amount": "+ 2 km", "text": "Easy warm-up before you start", "zone": "easy"}, {"amount": "21.1 km", "text": "Time trial: even, hard effort", "zone": "tt"}], "note": "Your big checkpoint. Log your time and paces update for the final weeks. Around 1:55 or quicker means sub-4 is realistic. Enter a local half this weekend if you can find one."}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Very easy after yesterday’s time trial; walk breaks are fine."}, {"day": "Any", "type": "easy", "title": "30 min", "label": "Easy", "optional": true, "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 16, "focus": "10 km at marathon pace in the middle of a 30 km run.", "sessions": [{"day": "Wed", "type": "intervals", "title": "60 min", "durationMin": 60, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "6 × 4 min", "text": "Interval pace, 2 min easy jog between", "zone": "intervals"}, {"amount": "11 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "30 km", "distanceKm": 30, "steps": [{"amount": "12 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "10 km", "text": "Marathon pace", "zone": "mp"}, {"amount": "8 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "50 min", "label": "Recovery", "durationMin": 50, "steps": [{"amount": "50 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "45 min", "label": "Easy", "optional": true, "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 17, "focus": "Peak week: 32 km. Treat it as a dress rehearsal.", "sessions": [{"day": "Wed", "type": "threshold", "title": "60 min", "durationMin": 60, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "3 × 10 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "11 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "32 km", "distanceKm": 32, "steps": [{"amount": "32 km", "text": "Easy long-run pace", "zone": "long"}], "note": "Your longest run. Full race rehearsal: breakfast, kit, gels."}, {"day": "Sun", "type": "recovery", "title": "45 min", "label": "Recovery", "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "45 min", "label": "Easy", "optional": true, "durationMin": 45, "steps": [{"amount": "45 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 18, "focus": "Taper begins, but there’s one last 14 km at goal pace.", "sessions": [{"day": "Wed", "type": "threshold", "title": "50 min", "durationMin": 50, "steps": [{"amount": "15 min", "text": "Easy warm-up"}, {"amount": "4 × 5 min", "text": "Threshold, 2 min easy jog between", "zone": "threshold"}, {"amount": "9 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "26 km", "distanceKm": 26, "steps": [{"amount": "6 km", "text": "Easy long-run pace", "zone": "long"}, {"amount": "14 km", "text": "Marathon pace", "zone": "mp"}, {"amount": "6 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "40 min", "label": "Recovery", "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "40 min", "label": "Easy", "optional": true, "durationMin": 40, "steps": [{"amount": "40 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 19, "focus": "Volume drops. Keep a little pace in the legs and sleep well.", "tag": "Taper", "sessions": [{"day": "Wed", "type": "mp", "title": "45 min", "durationMin": 45, "steps": [{"amount": "10 min", "text": "Easy warm-up"}, {"amount": "25 min", "text": "Marathon pace", "zone": "mp"}, {"amount": "10 min", "text": "Easy cool-down"}]}, {"day": "Sat", "type": "long", "title": "18 km", "distanceKm": 18, "steps": [{"amount": "18 km", "text": "Easy long-run pace", "zone": "long"}]}, {"day": "Sun", "type": "recovery", "title": "30 min", "label": "Recovery", "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Legs will be tired from Saturday, which is the point. Bike or cross-trainer if calves or shins are tight."}, {"day": "Any", "type": "easy", "title": "30 min", "label": "Easy", "optional": true, "durationMin": 30, "steps": [{"amount": "30 min", "text": "Easy", "zone": "easy"}], "note": "Any day except Friday. Monday or Tuesday is ideal."}]}, {"week": 20, "focus": "Race week. Short and sharp, then rest. The hard work is done.", "tag": "Race week", "sessions": [{"day": "Wed", "type": "mp", "title": "30 min", "durationMin": 30, "steps": [{"amount": "10 min", "text": "Easy"}, {"amount": "3 × 3 min", "text": "Marathon pace, 2 min easy jog between", "zone": "mp"}, {"amount": "7 min", "text": "Easy"}]}, {"day": "Sat", "type": "rest", "title": "Rest or 15–20 min shakeout", "label": "Pre-race", "steps": [{"amount": "15–20 min", "text": "Very easy jog with 3 × 20 s strides, or rest completely"}], "note": "Lay out your kit, pin your number, eat a familiar carb-heavy dinner."}, {"day": "Sun", "type": "race", "title": "Manchester Marathon", "distanceKm": 42.2, "steps": [{"amount": "0–5 km", "text": "Settle in at 5:40/km or a touch slower"}, {"amount": "5–32 km", "text": "Lock in at 5:35–5:38/km by your watch"}, {"amount": "32–42.2 km", "text": "Hold form; push if you have it"}], "note": "Fuel every 30–40 minutes from the start. Enjoy it, you’ve earned it."}, {"day": "Any", "type": "easy", "title": "20 min", "label": "Easy", "optional": true, "durationMin": 20, "steps": [{"amount": "20 min", "text": "Very easy, Monday or Tuesday only", "zone": "easy"}]}]}]};
 const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const TYPES = {easy:"Easy",recovery:"Recovery",long:"Long run",mp:"Race pace",tempo:"Tempo",threshold:"Threshold",intervals:"Intervals",test:"Time trial",race:"Race day",rest:"Rest",cross:"Cross-training"};
 const ZONES = ["easy","long","mp","tempo","threshold","intervals","tt"];
 const LEVEL = {easy:1,recovery:1,rest:1,cross:1,long:2,mp:3,tempo:4,threshold:4,intervals:4,test:4,race:4};
 const CLS = {easy:"easy",recovery:"easy",rest:"easy",cross:"easy",long:"long",mp:"mp",tempo:"tempo",threshold:"tempo",intervals:"intervals",test:"test",race:"race"};
+const EXAMPLE_WEEK = {week:6, focus:"First checkpoint, then a longer long run.", tag:"Checkpoint", sessions:[
+  {day:"Wed", type:"test", title:"5 km time trial", durationMin:50, checkpoint:{distanceKm:5}, steps:[
+    {amount:"15 min", text:"Easy warm-up with 3 × 20 s strides", zone:"easy"},
+    {amount:"5 km", text:"Time trial: even, hard effort, strongest in the last kilometre", zone:"tt"},
+    {amount:"10 min", text:"Easy cool-down", zone:"easy"}], note:"Log your 5 km time and your paces update from this week on."},
+  {day:"Sat", type:"long", title:"20 km", distanceKm:20, steps:[
+    {amount:"18 km", text:"Easy long-run pace", zone:"long"},
+    {amount:"2 km", text:"Steady, a little quicker"}]}]};
 
 function distName(km){
   if(Math.abs(km-42.195)<0.3) return "marathon";
@@ -483,17 +546,19 @@ function compile(plan){
     all: weeks.flatMap(w=>w.sessions).filter(s=>!s.optional && s.type!=="rest")};
 }
 
-const BUILTIN = validatePlan(RAW_BUILTIN).plan;
+// Logs saved by very early versions (before plans) are kept under this id.
+const LEGACY_ID = "legacy";
 
 // ---------- State and persistence ----------
 // One synced document: every uploaded plan, the active plan, and a separate log per plan.
 // Each run entry, result and plan carries `u` (last edited) so devices merge cleanly.
 const LS_KEY = "mcr27-log-v4";
-let S = {v:4, active:{id:BUILTIN.id,u:0}, plans:{}, logs:{}};
+const emptyState = () => ({v:4, active:{id:"",u:0}, plans:{}, logs:{}});
+let S = emptyState();
 function normalizeState(d){
-  if(!d || typeof d!=="object") return {v:4, active:{id:BUILTIN.id,u:0}, plans:{}, logs:{}};
-  if(d.logs) return {v:4, active:d.active||{id:BUILTIN.id,u:0}, plans:d.plans||{}, logs:d.logs||{}};
-  return {v:4, active:{id:BUILTIN.id,u:0}, plans:{}, logs:{[BUILTIN.id]:{sessions:d.sessions||{}, benchmarks:d.benchmarks||[]}}};
+  if(!d || typeof d!=="object") return emptyState();
+  if(d.logs) return {v:4, owner:d.owner, active:d.active||{id:"",u:0}, plans:d.plans||{}, logs:d.logs||{}};
+  return {v:4, active:{id:LEGACY_ID,u:0}, plans:{}, logs:{[LEGACY_ID]:{sessions:d.sessions||{}, benchmarks:d.benchmarks||[]}}};
 }
 try{
   const raw = localStorage.getItem(LS_KEY);
@@ -516,7 +581,7 @@ function mergeLog(a,b){
 }
 function mergeState(a, b){
   a=normalizeState(a); b=normalizeState(b);
-  const out={v:4, active:(b.active.u||0) > (a.active.u||0) ? b.active : a.active, plans:Object.assign({},a.plans), logs:{}};
+  const out={v:4, owner:a.owner||b.owner, active:(b.active.u||0) > (a.active.u||0) ? b.active : a.active, plans:Object.assign({},a.plans), logs:{}};
   Object.entries(b.plans).forEach(([k,v])=>{ const cur=out.plans[k]; if(!cur || (v.u||0)>(cur.u||0)) out.plans[k]=v; });
   new Set([...Object.keys(a.logs),...Object.keys(b.logs)]).forEach(k=>{ out.logs[k]=mergeLog(a.logs[k],b.logs[k]); });
   return out;
@@ -525,14 +590,17 @@ function mergeState(a, b){
 // ---------- Active plan ----------
 const compiled = {};
 function planList(){
-  const list=[{plan:BUILTIN, builtin:true, u:0}];
-  Object.values(S.plans).forEach(e=>{ if(e && !e.del && e.plan){ const i=list.findIndex(x=>x.plan.id===e.plan.id); if(i>=0) list[i]={plan:e.plan,u:e.u,builtin:list[i].builtin,updated:true}; else list.push({plan:e.plan,u:e.u}); } });
+  const list=[];
+  Object.values(S.plans).forEach(e=>{ if(e && !e.del && e.plan) list.push({plan:e.plan,u:e.u}); });
   return list.sort((a,b)=>parseISO(a.plan.race.date)-parseISO(b.plan.race.date));
 }
 function getCompiled(entry){ const k=entry.plan.id+":"+(entry.u||0); return compiled[k] || (compiled[k]=compile(entry.plan)); }
 let P, log, bench;
 function bindPlan(){
-  const list=planList(); const e=list.find(x=>x.plan.id===S.active.id) || list.find(x=>x.builtin);
+  const list=planList();
+  if(!list.length){ P=null; log={}; bench=[]; return; }
+  const now=todayUTC();
+  const e=list.find(x=>x.plan.id===S.active.id) || list.find(x=>parseISO(x.plan.race.date)>=now) || list[list.length-1];
   P = getCompiled(e);
   S.logs[P.id] = S.logs[P.id] || {sessions:{}, benchmarks:[]};
   log = S.logs[P.id].sessions; bench = S.logs[P.id].benchmarks;
@@ -557,7 +625,7 @@ function scheduleSave(){
 async function sync(){
   saveTimer = null;
   if(!sb || !session) return;
-  if(!navigator.onLine){ setStatus("Offline. Saved on this device; it will sync when you’re back online."); return; }
+  if(!navigator.onLine){ setStatus("Offline. Saved on this device; it will sync when you’re back online."); if(!firstSyncDone){ firstSyncDone=true; renderAll(); } return; }
   if(syncing){ again = true; return; }
   syncing = true;
   try{
@@ -566,6 +634,7 @@ async function sync(){
     const remote = normalizeState(data && data.data);
     const merged = mergeState(remote, stateObj());
     const changedHere = JSON.stringify(merged) !== JSON.stringify(stateObj());
+    merged.owner = session.user.id;
     S = merged; bindPlan(); saveLocal();
     if(changedHere && !saveTimer) renderAll();
     if(!data || JSON.stringify(merged) !== JSON.stringify(data.data)){
@@ -573,9 +642,11 @@ async function sync(){
       if(e2) throw e2;
     }
     setStatus(`<b>Synced.</b> Signed in as ${esc(session.user.email||"you")}.`);
+    if(!firstSyncDone){ firstSyncDone=true; renderAll(); }
   }catch(e){
     console.error(e);
     setStatus("Couldn’t sync just now. Your log is saved on this device and will sync next time.");
+    if(!firstSyncDone){ firstSyncDone=true; renderAll(); }
   }finally{
     syncing = false; if(again){ again = false; sync(); }
   }
@@ -617,7 +688,7 @@ const kindLabel = s => s.label || (s.type==="mp" ? racePaceName(P.dist) : TYPES[
 
 // ---------- Rendering ----------
 let sel = 1;
-function initialWeek(){ const m=/^#week-(\d+)$/.exec(location.hash); const n=m?+m[1]:0; return n>=1&&n<=P.n?n:currentWeek(); }
+function initialWeek(){ if(!P) return 1; const m=/^#week-(\d+)$/.exec(location.hash); const n=m?+m[1]:0; return n>=1&&n<=P.n?n:currentWeek(); }
 sel = initialWeek();
 
 const ONES=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
@@ -648,8 +719,8 @@ function renderChrome(){
   document.getElementById("planbar").hidden = list.length<2;
   ps.innerHTML = list.map(e=>`<option value="${esc(e.plan.id)}" ${e.plan.id===P.id?"selected":""}>${esc(e.plan.race.name)} (${e.plan.race.date.slice(0,4)})</option>`).join("");
   // notes
-  document.getElementById("notes").innerHTML = P.plan.notes.length ? P.plan.notes.map(n=>`<h3>${esc(n.title)}</h3>${n.text.map(t=>`<p>${esc(t)}</p>`).join("")}${n.bullets.length?`<ul>${n.bullets.map(b=>`<li>${esc(b)}</li>`).join("")}</ul>`:""}`).join("") : "<p>This plan doesn’t include any notes.</p>";
-  document.getElementById("notesWrap").hidden = false;
+  document.getElementById("notesWrap").hidden = !P.plan.notes.length;
+  document.getElementById("notes").innerHTML = P.plan.notes.map(n=>`<h3>${esc(n.title)}</h3>${n.text.map(t=>`<p>${esc(t)}</p>`).join("")}${n.bullets.length?`<ul>${n.bullets.map(b=>`<li>${esc(b)}</li>`).join("")}</ul>`:""}`).join("");
 }
 function renderProfile(){
   const g=document.getElementById("graph"), nums=document.getElementById("wknums"), ph=document.getElementById("phases");
@@ -776,15 +847,35 @@ function renderWeek(){
 function renderPlans(){
   const list=planList();
   document.getElementById("planList").innerHTML = list.map(e=>{ const p=e.plan, on=p.id===P.id;
-    return `<li class="${on?"active":""}"><span><span class="pname">${esc(p.race.name)}</span><br>${esc(p.title)}<br><span style="color:var(--w72);font-size:13px">${fmtDate(new Date(parseISO(p.race.date)),{day:"numeric",month:"short",year:"numeric"})}, ${p.weeks.length} weeks${e.builtin?", built in":""}</span></span>
+    return `<li class="${on?"active":""}"><span><span class="pname">${esc(p.race.name)}</span><br>${esc(p.title)}<br><span style="color:var(--w72);font-size:13px">${fmtDate(new Date(parseISO(p.race.date)),{day:"numeric",month:"short",year:"numeric"})}, ${p.weeks.length} weeks</span></span>
       <span class="plan-acts">${on?'<span class="flag">Active</span>':`<button class="linkbtn" data-use="${esc(p.id)}">Use this plan</button>`}
       <button class="linkbtn" data-dlplan="${esc(p.id)}">Download</button>
-      ${!e.builtin||e.updated?`<button class="linkbtn" data-rmplan="${esc(p.id)}">${e.builtin?"Restore original":"Remove"}</button>`:""}</span></li>`; }).join("");
+      <button class="linkbtn" data-rmplan="${esc(p.id)}">Remove</button></span></li>`; }).join("");
 }
-function renderAll(){ renderChrome(); renderProfile(); renderTotals(); renderWeek(); renderPaces(); renderPlans(); }
-function go(w){ sel=Math.min(P.n,Math.max(1,w)); try{ history.replaceState(null,"","#week-"+sel); }catch(e){} renderProfile(); renderWeek(); renderPaces(); }
+let firstSyncDone = false, authChecked = false;
+function renderGate(){
+  const needSignIn = !!sb && authChecked && !session;
+  const loading = !!sb && (!authChecked || (!!session && !firstSyncDone && !planList().length));
+  const noPlan = !needSignIn && !loading && !P;
+  const showWelcome = needSignIn || loading || noPlan;
+  document.getElementById("welcome").hidden = !showWelcome;
+  document.getElementById("app").hidden = showWelcome;
+  document.getElementById("stepSignIn").hidden = !needSignIn;
+  document.getElementById("stepLoading").hidden = !loading;
+  document.getElementById("stepPlan").hidden = !noPlan;
+  document.getElementById("wWho").innerHTML = session ? `Signed in as ${esc(session.user.email||"you")}. <button class="linkbtn" data-signout>Sign out</button>` : "";
+  if(showWelcome){
+    document.querySelectorAll("[data-brand]").forEach(e=>e.textContent="RUN/LOG");
+    document.getElementById("planTitle").textContent="Training plan and run log";
+    document.getElementById("issue").textContent = needSignIn ? "Welcome" : "Getting started";
+    document.title="Training plan and run log";
+  }
+  return showWelcome;
+}
+function renderAll(){ if(renderGate()) return; renderChrome(); renderProfile(); renderTotals(); renderWeek(); renderPaces(); renderPlans(); }
+function go(w){ if(!P) return; sel=Math.min(P.n,Math.max(1,w)); try{ history.replaceState(null,"","#week-"+sel); }catch(e){} renderProfile(); renderWeek(); renderPaces(); }
 function switchPlan(id){
-  S.active={id,u:Date.now()}; bindPlan(); sel=currentWeek();
+  S.active={id,u:Date.now()}; bindPlan(); sel=P?currentWeek():1;
   try{ history.replaceState(null,"","#week-"+sel); }catch(e){}
   scheduleSave(); renderAll(); window.scrollTo({top:0});
 }
@@ -792,7 +883,7 @@ function switchPlan(id){
 // ---------- Events ----------
 document.getElementById("graph").addEventListener("click",e=>{ const b=e.target.closest(".node"); if(b) go(+b.dataset.w); });
 document.getElementById("planSel").addEventListener("change",e=>switchPlan(e.target.value));
-window.addEventListener("hashchange",()=>{ const m=/^#week-(\d+)$/.exec(location.hash); if(m && +m[1]!==sel && +m[1]>=1 && +m[1]<=P.n){ sel=+m[1]; renderProfile(); renderWeek(); renderPaces(); }});
+window.addEventListener("hashchange",()=>{ if(!P) return; const m=/^#week-(\d+)$/.exec(location.hash); if(m && +m[1]!==sel && +m[1]>=1 && +m[1]<=P.n){ sel=+m[1]; renderProfile(); renderWeek(); renderPaces(); }});
 const weekEl=document.getElementById("week");
 weekEl.addEventListener("click",e=>{
   const nav=e.target.closest("[data-nav]"); if(nav){ go(sel+ +nav.dataset.nav); return; }
@@ -846,8 +937,9 @@ document.getElementById("results").addEventListener("click",e=>{
 });
 
 // ---------- Plans: upload, paste, switch, remove, AI prompt ----------
-const planMsg=document.getElementById("planMsg");
-function addPlanFromText(text){
+let planMsg=document.getElementById("planMsg");
+function addPlanFromText(text, msgEl){
+  planMsg = msgEl || document.getElementById("planMsg");
   let obj;
   const m = String(text).match(/\{[\s\S]*\}/);
   try{ obj = JSON.parse(m?m[0]:text); }catch(e){ planMsg.innerHTML="That isn’t valid JSON. Make sure you copied the whole code block, from the first { to the last }."; return; }
@@ -856,52 +948,64 @@ function addPlanFromText(text){
   const existed = planList().some(e=>e.plan.id===plan.id);
   S.plans[plan.id] = {plan, u:Date.now()};
   switchPlan(plan.id);
+  planMsg = document.getElementById("planMsg");
+  if(warnings.length || existed) document.getElementById("plansWrap").open = true;
   planMsg.innerHTML = `${existed?"Updated":"Added"} “${esc(plan.race.name)}” and switched to it.${existed?" Your log for this plan was kept.":""}`
     + (warnings.length?`<br>Please check:<br>${warnings.slice(0,8).map(esc).join("<br>")}${warnings.length>8?`<br>…and ${warnings.length-8} more.`:""}`:"");
 }
 document.getElementById("planFile").addEventListener("change", async e=>{
   const file=e.target.files[0]; if(!file) return;
-  addPlanFromText(await file.text()); e.target.value="";
+  addPlanFromText(await file.text(), document.getElementById("planMsg")); e.target.value="";
 });
 document.getElementById("planPasteBtn").addEventListener("click",()=>{
   const t=document.getElementById("planPaste").value.trim();
   if(!t){ planMsg.textContent="Paste the plan first."; return; }
-  addPlanFromText(t); document.getElementById("planPaste").value="";
+  addPlanFromText(t, document.getElementById("planMsg")); document.getElementById("planPaste").value="";
 });
 document.getElementById("planList").addEventListener("click",e=>{
   const use=e.target.closest("[data-use]"); if(use){ switchPlan(use.dataset.use); planMsg.textContent=""; return; }
   const dl=e.target.closest("[data-dlplan]"); if(dl){ const p=planList().find(x=>x.plan.id===dl.dataset.dlplan).plan; saveFile(`${p.id}.json`, JSON.stringify(p,null,1), "application/json"); return; }
   const rm=e.target.closest("[data-rmplan]");
   if(rm){ const id=rm.dataset.rmplan, p=planList().find(x=>x.plan.id===id);
-    const isBuiltin = id===BUILTIN.id;
-    if(!confirm(isBuiltin ? "Go back to the original version of this plan? Your log is kept." : `Remove “${p.plan.race.name}”? Its log stays saved, so re-adding the same plan brings it back.`)) return;
+    if(!confirm(`Remove “${p.plan.race.name}”? Its log stays saved, so re-adding the same plan brings it back.`)) return;
     S.plans[id]={del:true,u:Date.now()};
-    if(P.id===id && !isBuiltin) S.active={id:BUILTIN.id,u:Date.now()};
-    bindPlan(); sel=Math.min(sel,P.n); scheduleSave(); renderAll(); }
+    if(P && P.id===id) S.active={id:"",u:Date.now()};
+    bindPlan(); if(P) sel=Math.min(sel,P.n); scheduleSave(); renderAll(); }
 });
-document.getElementById("aiPrompt").textContent = AI_PROMPT();
-document.getElementById("copyPrompt").addEventListener("click", async ()=>{
-  const t=document.getElementById("aiPrompt").textContent, m=document.getElementById("copyMsg");
-  try{ await navigator.clipboard.writeText(t); m.textContent="Copied. Paste it into Claude, ChatGPT or similar."; }
-  catch(e){ const r=document.createRange(); r.selectNodeContents(document.getElementById("aiPrompt")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); m.textContent="Selected. Use your device’s Copy option."; }
+// Two prompt choices, shown on the welcome screen and under Your plans.
+const PROMPT_CARDS = [
+  {key:"create", title:"Create a new plan", text:"Starting from scratch. The AI asks about your fitness, goals and availability, then builds a plan in the right format."},
+  {key:"convert", title:"Convert a plan you already have", text:"For a plan from a coach, a book, a website or an earlier chat. Add your plan after the prompt and the AI reformats it without changing the training."}];
+function renderPrompts(el){
+  el.innerHTML = PROMPT_CARDS.map((c,i)=>`<div class="tile prompt-card">
+      <p class="cap"><span class="idx" style="color:var(--white)">${String.fromCharCode(65+i)}</span>Prompt</p>
+      <h3 class="pc-title">${c.title}</h3>
+      <p class="pc-text">${c.text}</p>
+      <button class="chip" data-copy="${c.key}">Copy prompt</button>
+      <p class="err" data-msg="${c.key}" role="status"></p>
+      <details class="promptbox"><summary>See the prompt</summary><pre class="prompt" data-pre="${c.key}"></pre></details>
+    </div>`).join("");
+  el.querySelectorAll("[data-pre]").forEach(pre=>{ pre.textContent = PROMPTS[pre.dataset.pre](); });
+  el.addEventListener("click", async e=>{
+    const btn=e.target.closest("[data-copy]"); if(!btn) return;
+    const k=btn.dataset.copy, pre=el.querySelector(`[data-pre="${k}"]`), m=el.querySelector(`[data-msg="${k}"]`);
+    el.querySelectorAll("[data-msg]").forEach(x=>x.textContent="");
+    try{ await navigator.clipboard.writeText(pre.textContent); m.textContent="Copied. Paste it into Claude, ChatGPT or similar."; }
+    catch(err){ pre.closest("details").open=true; const r=document.createRange(); r.selectNodeContents(pre); const s=getSelection(); s.removeAllRanges(); s.addRange(r); m.textContent="Selected. Use your device’s Copy option."; }
+  });
+}
+
+document.getElementById("wPlanFile").addEventListener("change", async e=>{
+  const file=e.target.files[0]; if(!file) return;
+  addPlanFromText(await file.text(), document.getElementById("wPlanMsg")); e.target.value="";
 });
-function AI_PROMPT(){
-  const w = BUILTIN.weeks[5];
-  const example = JSON.stringify({week:w.week, focus:w.focus, tag:w.tag, sessions:w.sessions.slice(0,2)}, null, 1);
-  return `You are an experienced running coach. Please build me a personalised training plan for a race, and then give it to me as a JSON file for my training app.
-
-STEP 1: QUESTIONS FIRST
-Before writing the plan, ask me any questions you need about my current fitness, goals and availability. Wait for my answers. Here is what I can tell you so far:
-- Race name, location, date and distance: [fill in]
-- Target finish time: [fill in]
-- Recent race or time-trial results (distance, time, date): [fill in]
-- Current weekly running (km per week) and longest recent run: [fill in]
-- Days and time I can run each week: [fill in]
-- Injuries or niggles to plan around: [fill in]
-- Date I want the plan to start (a Monday): [fill in]
-
-STEP 2: THE PLAN
-Once we've agreed the plan, output it as ONE JSON code block and nothing else inside the block. Follow this format exactly.
+document.getElementById("wPlanPasteBtn").addEventListener("click",()=>{
+  const t=document.getElementById("wPlanPaste").value.trim(), m=document.getElementById("wPlanMsg");
+  if(!t){ m.textContent="Paste the plan first."; return; }
+  addPlanFromText(t, m); if(P) document.getElementById("wPlanPaste").value="";
+});
+function FORMAT_SPEC(convert){
+  return `${convert ? "Output the plan" : "Once we've agreed the plan, output it"} as ONE JSON code block and nothing else inside the block. Follow this format exactly.
 
 Top-level fields:
 - "format": "run-plan/1"
@@ -943,15 +1047,43 @@ Each session:
 - "note": optional extra guidance.
 
 Rules:
-- Easy, recovery, tempo, threshold and interval sessions should be time-based (minutes), so they work on a treadmill. Long runs should be distance-based, in km.
-- "zone" links a step to my live training paces, which the app calculates and keeps updated: easy, long, mp, tempo, threshold, intervals, or tt (the time-trial effort, only inside checkpoint sessions). Don't write paces in the text of steps that have a zone; the app adds them.
-- Include 2 or 3 checkpoint time trials spread through the plan (5 km works well), so my paces update as I get fitter.
-- The race itself must be a session with "type": "race" in the final week, on race day.
+${convert ? "" : "- Easy, recovery, tempo, threshold and interval sessions should be time-based (minutes), so they work on a treadmill. Long runs should be distance-based, in km.\n"}- "zone" links a step to my live training paces, which the app calculates and keeps updated: easy, long, mp, tempo, threshold, intervals, or tt (the time-trial effort, only inside checkpoint sessions). Don't write paces in the text of steps that have a zone; the app adds them.
+${convert ? "" : "- Include 2 or 3 checkpoint time trials spread through the plan (5 km works well), so my paces update as I get fitter.\n"}- The race itself must be a session with "type": "race" in the final week, on race day.
 - Use plain text inside strings, with no markdown.
 
 Example of one week (shortened):
-${example}`;
+${JSON.stringify(EXAMPLE_WEEK, null, 1)}`;
 }
+const PROMPTS = {
+  create: () => `You are an experienced running coach. Please build me a personalised training plan for a race, and then give it to me as a JSON file for my training app.
+
+STEP 1: QUESTIONS FIRST
+Before writing the plan, ask me any questions you need about my current fitness, goals and availability. Wait for my answers. Here is what I can tell you so far:
+- Race name, location, date and distance: [fill in]
+- Target finish time: [fill in]
+- Recent race or time-trial results (distance, time, date): [fill in]
+- Current weekly running (km per week) and longest recent run: [fill in]
+- Days and time I can run each week: [fill in]
+- Injuries or niggles to plan around: [fill in]
+- Date I want the plan to start (a Monday): [fill in]
+
+STEP 2: THE PLAN
+${FORMAT_SPEC(false)}`,
+  convert: () => `I have a running training plan that I'd like converted into a JSON file for my training app. The plan is at the end of this message.
+
+Please follow these steps:
+1. Keep the training exactly as written: every week, day, session, distance and duration. Don't add, remove or change any sessions, except where step 4 says so.
+2. Before writing the JSON, check whether anything the format needs is missing from my plan, and ask me for it. This usually means: the race name, location, date and distance; my target finish time; my most recent race or time-trial result (distance, time and date), which sets my starting paces; and the date the plan starts. Wait for my answers.
+3. Where a step is described by effort or pace (for example "easy", "threshold", "marathon pace" or "5:30/km"), set the matching zone on that step: easy, long, mp, tempo, threshold or intervals. The app shows live paces for zoned steps, so leave specific paces out of the text of those steps.
+4. Mark any time trials or tune-up races in the plan as checkpoint sessions. If the plan has none, ask me whether I'd like 2 or 3 short time trials added so my paces can update as I get fitter. Only add them if I say yes.
+5. Keep the plan's own units: if a session is given in km, keep it in km; if it's given in minutes, keep it in minutes.
+6. Put any general advice in the plan (for example on pacing, fuelling, strength work or missed sessions) into "notes", and a one-sentence aim for each week into "focus".
+
+${FORMAT_SPEC(true)}
+
+MY PLAN:
+[Paste your plan here, or attach it]`
+};
 
 // ---------- Backups: CSV export, JSON backup, import ----------
 function saveFile(name, text, type){
@@ -1012,16 +1144,16 @@ const acctBtn = document.getElementById("acctBtn"), acctPanel = document.getElem
 const emailIn = document.getElementById("acctEmail"), codeIn = document.getElementById("acctCode"), acctMsg = document.getElementById("acctMsg");
 const passIn = document.getElementById("acctPass");
 function renderAccount(){
-  if(!sb){ acctBtn.hidden = true; acctPanel.hidden = true; return; }
-  acctBtn.hidden = false;
-  acctBtn.textContent = session ? "Sign out" : "Sign in to sync";
-  if(session) acctPanel.hidden = true;
+  acctBtn.hidden = !sb || !session;
+  acctBtn.textContent = "Sign out";
 }
-acctBtn.addEventListener("click", async ()=>{
-  if(session){ await sb.auth.signOut(); return; }
-  acctPanel.hidden = !acctPanel.hidden;
-  if(!acctPanel.hidden) emailIn.focus();
-});
+async function signOut(){
+  if(!confirm("Sign out? Your log stays safe in your account; this device will forget it until you sign in again.")) return;
+  if(saveTimer){ clearTimeout(saveTimer); await sync(); }
+  await sb.auth.signOut();
+}
+acctBtn.addEventListener("click", signOut);
+document.getElementById("welcome").addEventListener("click", e=>{ if(e.target.closest("[data-signout]")) signOut(); });
 function creds(){
   const email = emailIn.value.trim(), password = passIn.value;
   if(!/^\S+@\S+\.\S+$/.test(email)){ acctMsg.textContent = "Enter your email address."; return null; }
@@ -1054,17 +1186,26 @@ document.getElementById("acctVerify").addEventListener("click", async ()=>{
   acctMsg.textContent = error ? `That code didn’t work: ${error.message}` : "";
 });
 
+// Local data on this device belongs to whoever last signed in here.
+function claimLocal(uid){
+  if(S.owner && S.owner!==uid){ S = emptyState(); bindPlan(); }
+  S.owner = uid; saveLocal();
+}
 async function connect(){
   renderAccount();
-  if(!sb){ setStatus("Saved on this device."); return; }
+  if(!sb){ setStatus("Saved on this device."); firstSyncDone=true; renderAll(); return; }
   const { data } = await sb.auth.getSession();
-  session = data.session; renderAccount();
-  if(session) sync(); else setStatus("Saved on this device. Sign in to sync across devices.");
+  session = data.session; authChecked = true; renderAccount();
+  if(session){ claimLocal(session.user.id); renderAll(); sync(); } else renderAll();
   sb.auth.onAuthStateChange((event, s)=>{
     const was = session && session.user.id;
     session = s; renderAccount();
-    if(s && s.user.id !== was) sync();
-    if(!s) setStatus("Signed out. Your log stays saved on this device.");
+    if(s && s.user.id !== was){ claimLocal(s.user.id); firstSyncDone=false; renderAll(); sync(); }
+    if(!s && was){
+      // Forget this person's data on the device, so the next person starts fresh.
+      S = emptyState(); try{ localStorage.removeItem(LS_KEY); }catch(e){}
+      bindPlan(); firstSyncDone=false; acctMsg.textContent=""; renderAll();
+    }
   });
   document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible" && session && !saveTimer) sync(); });
   window.addEventListener("online", ()=>{ if(session) sync(); });
@@ -1072,9 +1213,12 @@ async function connect(){
 
 if("serviceWorker" in navigator && location.protocol==="https:"){ navigator.serviceWorker.register("./sw.js").catch(()=>{}); }
 
+renderPrompts(document.getElementById("prompts"));
+renderPrompts(document.getElementById("wPrompts"));
 renderAll();
 connect();
 })();
+
 
 </script>
 </body>

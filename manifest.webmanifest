@@ -1,7 +1,7 @@
 {
-  "name": "Manchester Marathon 2027 – Sub-4 Plan",
-  "short_name": "MCR/27",
-  "description": "20-week sub-4 training plan and run log for the Manchester Marathon.",
+  "name": "Run Log – training plans",
+  "short_name": "Run Log",
+  "description": "A running plan viewer and run log with paces that update from your results.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
