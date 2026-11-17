@@ -82,7 +82,7 @@ Plans are saved in your Supabase account with your log, so there's nothing to up
 
 ## Updating later
 
-Edit or replace files in the GitHub repository and the app picks up the changes the next time it's opened with a connection. If you ever change the list of files in `sw.js`, also change `CACHE = "runlog-v2"` to `"runlog-v3"` so phones refresh their offline copy.
+Edit or replace files in the GitHub repository and the app picks up the changes the next time it's opened with a connection. If you ever change the list of files in `sw.js`, also change `CACHE = "runlog-v3"` to `"runlog-v4"` so phones refresh their offline copy.
 
 ## How syncing works
 

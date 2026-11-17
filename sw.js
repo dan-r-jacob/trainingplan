@@ -1,6 +1,6 @@
 // Offline support: the app itself is cached so it opens with no signal.
 // Your Supabase data is never cached here; it syncs when you're back online.
-const CACHE = "runlog-v2";
+const CACHE = "runlog-v3";
 const SHELL = ["./", "./index.html", "./config.js", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
 const CDN = ["fonts.googleapis.com", "fonts.gstatic.com", "cdn.jsdelivr.net"];
 
